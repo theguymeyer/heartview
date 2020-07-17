@@ -1,0 +1,34 @@
+# nested repos
+pacemakerhrp2/
+Pacemaker_Development_Project_2.0/
+
+# untracked dirs
+/quanser/
+/__pycache__/
+*.py[cod]
+course_dev/ui/bin/test.py
+/financials/
+/pipeline/
+/requirements/
+/course_dev/presentation/
+/employment_agreement/
+
+# CubeMX
+course_dev/shield_nucleo_rev0/CubeMX/
+course_dev/shield_nucleo/CubeMX/test_ADCwithCPU-UARTwithDMA/
+
+# HeartView
+course_dev/ui-HeartView/dist/
+course_dev/ui-HeartView/build/
+
+# useless folders
+res/
+bin/
+
+# untracked files
+*.JPG
+*.jpg
+*.png
+*.jpeg
+*.mp4
+
