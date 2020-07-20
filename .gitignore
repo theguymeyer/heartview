@@ -31,4 +31,4 @@ bin/
 *.png
 *.jpeg
 *.mp4
-
+.DS_store
