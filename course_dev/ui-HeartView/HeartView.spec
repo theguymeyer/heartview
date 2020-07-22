@@ -4,16 +4,13 @@ block_cipher = None
 
 
 a = Analysis(['mainwindow.py'],
-             pathex=[
-                '/usr/local/lib/python3.7/site-packages/PyQt5/Qt/plugins/imageformats/',
-                '/Users/guy/Documents/pacemaker/course_dev/ui-HeartView',
-                '/Users/guy/Documents/pacemaker/course_dev/ui-HeartView/lib'],
+             pathex=['/Users/guy/Documents/heartview/course_dev/ui-HeartView'],
              binaries=[],
              datas=[
-                ('/Users/guy/Documents/pacemaker/course_dev/ui-HeartView/README.md', '.'), 
-                ('/Users/guy/Documents/pacemaker/course_dev/ui-HeartView/res/mac_fireball.jpg', 'res'), 
-                ('/Users/guy/Documents/pacemaker/course_dev/ui-HeartView/res/McSCert_Logo.png', 'res'), 
-                ('/Users/guy/Documents/pacemaker/course_dev/ui-HeartView/res/heartbeat.ico', 'res')],
+                ('/Users/guy/Documents/heartview/course_dev/ui-HeartView/README.md', '.'), 
+                ('/Users/guy/Documents/heartview/course_dev/ui-HeartView/res/mac_fireball.jpg', 'res'), 
+                ('/Users/guy/Documents/heartview/course_dev/ui-HeartView/res/McSCert_Logo.png', 'res'), 
+                ('/Users/guy/Documents/heartview/course_dev/ui-HeartView/res/pixel-heart.icns', 'res')],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
@@ -26,14 +23,16 @@ pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
+          a.binaries,
           [],
           exclude_binaries=True,
-          name='HeartView',
-          debug=1,
+          name='mainwindow',
+          debug=False,
           bootloader_ignore_signals=False,
           strip=False,
           upx=False,
-          console=True , icon='/Users/guy/Documents/pacemaker/course_dev/ui-HeartView/res/heartbeat.ico')
+          console=True,
+          icon='/Users/guy/Documents/heartview/course_dev/ui-HeartView/res/pixel-heart.icns' )
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
@@ -44,16 +43,17 @@ coll = COLLECT(exe,
                name='HeartView')
 app = BUNDLE(coll,
             name='HeartView.app',
-            icon='res/heartbeat.ico',
-            bundle_identifier='com.guymeyer.heartview.ui',
+            icon='res/pixel-heart.icns',
+            bundle_identifier='com.guymeyer.HeartView.ui',
             info_plist={
                 'NSPrincipalClass': 'NSApplication', 
                 'NSHighResolutionCapable': 'True',
                 'NSAppleScriptEnabled': False, 
+                'LSBackgroundOnly': False,
                 'CFBundleDocumentTypes': [{
                     'CFBundleTypeName': 'py', 
-                    'CFBundleTypeIconFile': 'res/heartbeat.ico', 
-                    'LSItemContentTypes': ['com.guymeyer.heartview.ui'], 
+                    'CFBundleTypeIconFile': 'res/pixel-heart.icns', 
+                    'LSItemContentTypes': ['com.guymeyer.HeartView.ui'], 
                     'LSHandlerRank': 'Owner'
                 }] 
             })
