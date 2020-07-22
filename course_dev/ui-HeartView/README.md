@@ -48,6 +48,18 @@ Currently in development, the distribution bundler is PyInstaller.
 
 According to the PyInstaller documentation the end users "do not need to have Python installed at all"[\[docs\]](https://readthedocs.org/projects/pyinstaller/downloads/pdf/latest/). Good to note! In addition the docs note that in order to generate executables for a different OS, a different version of Python, or a 32-bit/64-bit machine then PyInstaller must be run on that platform. The first distribution is for macOS Catalina 15.5.0
 
+In order to create a distributable bundle for OSX follow these instructions...
+
+Create a virtual environment using Python3.7.7 (I use pyenv). My virtual environment is called pyqt-venv-py3.7.7, therefore run, 
+
+`pyenv activate pyqt-venv-py3.7.7`
+
+Ensure that the correct libraries are installed using `pip3 freeze`. Key libraries are mentioned above in "Supporting Libraries". To generate a bundled package for OSX run the following: 
+
+`python3 -m PyInstaller --onefile --windowed HeartView.spec`
+
+.. and confirm if applicable (yes, yes)
+
 ### Icons
 
 Application icon (heartbeat.ico) found [here](https://www.iconarchive.com/show/medical-health-icons-by-graphicloads/heart-beat-icon.html)
