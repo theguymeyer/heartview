@@ -18,7 +18,6 @@ course_dev/shield_nucleo_rev0/CubeMX/
 course_dev/shield_nucleo/CubeMX/test_ADCwithCPU-UARTwithDMA/
 
 # HeartView
-course_dev/ui-HeartView/dist/
 course_dev/ui-HeartView/build/
 
 # useless folders
