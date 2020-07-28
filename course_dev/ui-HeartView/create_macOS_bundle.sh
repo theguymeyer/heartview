@@ -3,43 +3,41 @@
 FILENAME="HeartView"
 CWD=$(pwd)
 
-while getopts c:s: flag
+printf "Compiling App\n" > build.txt
+
+while getopts c:t:s: flag
 do
     case "${flag}" in
-        c) clearDirs=${OPTARG};;
-        s) clearSpec=${OPTARG};;
+        c) clearDirs=1;;
+        t) packageType=${OPTARG};;
+        s) code=${OPTARG};;
     esac
 done
 
 if [[ $clearDirs -eq 1 ]]
 then
-    rm -rf ./build ./dist
+    printf "\nClearing build and dist folders\n" >> build.txt
+    rm -rf ./build/ ./dist/
 fi
 
-if [[ $clearSpec -eq 1 ]]
+if [[ $packageType -eq 1 ]]
 then
-    rm "$FILENAME.spec"
+    printf "\nGenerating macOS Distribution from HeartView.spec as single file.\nEnsure that pyenv is running with pyqt-venv-py3.7.7\n\n" >> build.txt
+    sleep 2
+    
+    python3 -m PyInstaller --onefile --console --noconfirm HeartView.spec 2> build.txt
+elif [[ $packageType -eq 0 ]]
+then
+    printf "\nGenerating macOS Distribution from HeartView.spec as single directory.\nEnsure that pyenv is running with pyqt-venv-py3.7.7\n\n" >> build.txt
+    sleep 2
+
+    python3 -m PyInstaller --onedir --console --noconfirm HeartView.spec 2> build.txt
 fi
 
-printf "\nGenerating macOS Distribution from HeartView.spec\nEnsure that pyenv is running with pyqt-venv-py3.7.7\n\n"
-sleep 2
+if [[ -n $code ]]  
+then
+    printf "\n\nCode Signing App..." >> build.txt
+    codesign -f -s "Apple Development: Guy Meyer ($code)" dist/HeartView.app --deep
+fi
 
-python3 -m PyInstaller \
-    --noconfirm \
-    --onedir \
-    --console \
-    --add-data="$CWD/README.md:." \
-    --add-data="$CWD/res/mac_fireball.jpg:res" \
-    --add-data="$CWD/res/McSCert_Logo.png:res" \
-    --add-data="$CWD/res/heartbeat.ico:res" \
-    --log-level=DEBUG \
-    --osx-bundle-identifier="Apple Development: Guy Meyer (VVJQ6Y9Y2X)" \
-    --name="$FILENAME" \
-    --icon="$CWD/res/heartbeat.ico" \
-    mainwindow.py 2> build.txt
-    
-printf "\n\nCode Signing App..."
-
-codesign -f -s "Apple Development: Guy Meyer (VVJQ6Y9Y2X)" dist/HeartView --deep
-
-printf "\n\nFind Distro in \`dist\` folder\n"
+printf "\n\nFind Distro in \`dist\` folder\n" >> build.txt
