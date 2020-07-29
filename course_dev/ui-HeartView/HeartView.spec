@@ -2,6 +2,10 @@
 
 block_cipher = None
 
+import plistlib
+
+with open('./Info.plist', 'rb') as fp:
+    pl = plistlib.load(fp)
 
 a = Analysis(['mainwindow.py'],
              pathex=['/Users/guy/Documents/heartview/course_dev/ui-HeartView'],
@@ -45,15 +49,4 @@ app = BUNDLE(coll,
             name='HeartView.app',
             icon='res/pixel-heart.icns',
             bundle_identifier='com.guymeyer.HeartView.ui',
-            info_plist={
-                'NSPrincipalClass': 'NSApplication', 
-                'NSHighResolutionCapable': 'True',
-                'NSAppleScriptEnabled': False, 
-                'LSBackgroundOnly': False,
-                'CFBundleDocumentTypes': [{
-                    'CFBundleTypeName': 'py', 
-                    'CFBundleTypeIconFile': 'res/pixel-heart.icns', 
-                    'LSItemContentTypes': ['com.guymeyer.HeartView.ui'], 
-                    'LSHandlerRank': 'Owner'
-                }] 
-            })
+            info_plist=pl)
