@@ -66,7 +66,8 @@ A bundler script was created to automate the process of file generation, create_
 
 Manual:
 
-```NAME
+```
+NAME
     create_macOS_bundle.sh
 
 DESCRIPTION
