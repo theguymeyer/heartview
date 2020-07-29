@@ -99,6 +99,8 @@ After PyInstaller compilation it is time to sign the app found in dist/HeartView
 Use this command to sign the app:
 `codesign -s "$CERTIFICATE_COMMON_NAME" -v dist/HeartView.app --deep`
 
+The `--deep` flag is an important addition to ensure that all files are signed.
+
 Useful documentation by Apple when starting Codesigning [here](https://developer.apple.com/library/archive/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html)
 
 Useful documentation by PyInstaller when starting Codesigning [here](https://github.com/pyinstaller/pyinstaller/wiki/Recipe-OSX-Code-Signing)
