@@ -66,7 +66,7 @@ A bundler script was created to automate the process of file generation, create_
 
 Manual:
 
-NAME
+```NAME
     create_macOS_bundle.sh
 
 DESCRIPTION
@@ -89,6 +89,7 @@ EXAMPLES
     The following is how to generate a one-file app for macOS with code signing
 
         ./create_macOS_bundle_py2app.sh -t1 -s="Apple Development: Your Name (AAAA1A1A1A)" -c1 
+```
 
 ### Code Signing
 
