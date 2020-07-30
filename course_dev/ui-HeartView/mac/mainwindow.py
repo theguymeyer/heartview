@@ -2,15 +2,6 @@ import sys, threading
 
 from PyQt5 import QtCore, QtWidgets, QtGui  # Qt basics
 
-# Modify the 'application group' for windows distributions
-try:
-    # Include in try/except block if you're also targeting Mac/Linux
-    from PyQt5.QtWinExtras import QtWin
-    myappid = 'mycompany.myproduct.subproduct.version'
-    QtWin.setCurrentProcessExplicitAppUserModelID(myappid)    
-except ImportError:
-    pass
-
 # Plotting packages
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
@@ -37,6 +28,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         MainWindow.setObjectName(self, "MainWindow")
         MainWindow.resize(self, 1662, 512)
+        
+        print("Booting HeartView (macOS)...")
 
         # Create central widget
         self.centralWidget = QtGui.QWidget(self)
