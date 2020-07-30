@@ -1,19 +1,12 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 block_cipher = None
-import os
-import ntpath
-import PyQt5
 
 
-a = Analysis(["mainwindow.py"],
-             pathex=["C:\\Users\\Guy\\Documents\\pacemaker\\heartview\\course_dev\\ui-HeartView", os.path.join(ntpath.dirname(PyQt5.__file__), 'Qt', 'bin')],
+a = Analysis(['mainwindow_win.py'],
+             pathex=['C:\\Users\\Guy\\Documents\\pacemaker\\heartview\\course_dev\\ui-HeartView'],
              binaries=[],
-             datas=[
-                ("C:\\Users\\Guy\\Documents\\pacemaker\\heartview\\course_dev\\ui-HeartView\\README.md", "."), 
-                ("C:\\Users\\Guy\\Documents\\pacemaker\\heartview\\course_dev\\ui-HeartView\\res\\mac_fireball.jpg", "res"), 
-                ("C:\\Users\\Guy\\Documents\\pacemaker\\heartview\\course_dev\\ui-HeartView\\res\\McSCert_Logo.png", "res"), 
-                ("C:\\Users\\Guy\\Documents\\pacemaker\\heartview\\course_dev\\ui-HeartView\\res\\pixel-heart.ico", "res")],
+             datas=[('README.md', '.'), ('res\\mac_fireball.jpg', 'res'), ('res\\McSCert_Logo.png', 'res'), ('res\\pixel-heart.ico', 'res')],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
@@ -26,20 +19,15 @@ pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
+          a.binaries,
+          a.zipfiles,
+          a.datas,
           [],
-          exclude_binaries=True,
-          name='mainwindow',
+          name='HeartView',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
-          upx=False,
-          console=True,
-          icon="C:\\Users\\Guy\\Documents\\pacemaker\\heartview\\course_dev\\ui-HeartView\\res\\pixel-heart.ico" )
-coll = COLLECT(exe,
-               a.binaries,
-               a.zipfiles,
-               a.datas,
-               strip=False,
-               upx=False,
-               upx_exclude=[],
-               name="HeartView_win")
+          upx=True,
+          upx_exclude=[],
+          runtime_tmpdir=None,
+          console=True , icon='res\\pixel-heart.ico')
