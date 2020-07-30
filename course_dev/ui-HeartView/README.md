@@ -60,6 +60,64 @@ Ensure that the correct libraries are installed using `pip3 freeze`. Key librari
 
 .. and confirm if applicable (yes, yes)
 
-### Icons
+### Generating app
 
-Application icon (heartbeat.ico) found [here](https://www.iconarchive.com/show/medical-health-icons-by-graphicloads/heart-beat-icon.html)
+A bundler script was created to automate the process of file generation, create_macOS_bundle.sh
+
+Manual:
+
+```
+NAME
+    create_macOS_bundle.sh
+
+DESCRIPTION
+    used to compile a HeartView distributable for MacOS. Log info is dumped into 'build.txt' file which is unique for every run.
+
+    -t      Type of bundle
+                -t1 => one file
+                -t0 => one directory
+    
+    -c1     Clear dist and build dirs 
+                -c1 => clear
+    
+    -s      Apply codesign with certificate. The user must input  their certificate common name as an argument (something like this.. "Apple Development: Your Name (AAAA1A1A1A)")
+
+EXAMPLES
+    The following is how to generate a one-file app for macOS
+
+        ./create_macOS_bundle_py2app.sh -t1 -c1 
+
+    The following is how to generate a one-file app for macOS with code signing
+
+        ./create_macOS_bundle_py2app.sh -t1 -s="Apple Development: Your Name (AAAA1A1A1A)" -c1 
+```
+
+### Code Signing
+
+What a nightmare... The major reason for this component is to ensure that HeartView is a recognized app and can be freely distributed to all users.
+
+After PyInstaller compilation it is time to sign the app found in dist/HeartView.app
+
+Use this command to sign the app:
+`codesign -s "$CERTIFICATE_COMMON_NAME" -v dist/HeartView.app --deep`
+
+The `--deep` flag is an important addition to ensure that all files are signed.
+
+Useful documentation by Apple when starting Codesigning [here](https://developer.apple.com/library/archive/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html)
+
+Useful documentation by PyInstaller when starting Codesigning [here](https://github.com/pyinstaller/pyinstaller/wiki/Recipe-OSX-Code-Signing)
+
+I was having code signing errors and the instructions by honey9 in this [post](https://developer.apple.com/forums/thread/86161?login=true) really helped
+
+
+### Deployment
+
+When testing on other machines, namely macs, I ran into several early stage problems. 
+
+1) Apps in Quaratine: Since from an unknown developer HeartView was quarantined by macOS Sierra Version 10.12.6. This [post](https://apple.stackexchange.com/questions/181026/lsopenurlswithrole-failed-with-error-10810-cant-open-install-os-x-yosemite) resolved the issue.
+
+2) Error loading Python lib... dlopen... libintl.8.dylib
+
+The issue here is no reverse compatability for MacOS applications. The answer was indicated [here](https://github.com/pyinstaller/pyinstaller/issues/3418). As explained, in order to create copy for High Sierra and back the app much be compiled on a very like Mavericks. 
+
+A viable solution as noted by **abulka** is to create a Mavericks copy on VMware and install the python, pyinstaller and the source code. The app should be forward compatible to High Sierra.

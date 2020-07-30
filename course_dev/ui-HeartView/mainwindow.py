@@ -42,7 +42,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.centralWidget = QtGui.QWidget(self)
         self.setCentralWidget(self.centralWidget) 
         self.centralWidget.setObjectName("centralWidget")
-        self.setWindowTitle("Heart - Pacemaker Simulator")
+        self.setWindowTitle("HeartView - Heart Simulator")
 
         # setup main layout
         self.mainLayout = QtGui.QHBoxLayout()

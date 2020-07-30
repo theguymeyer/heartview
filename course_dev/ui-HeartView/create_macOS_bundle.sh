@@ -3,43 +3,41 @@
 FILENAME="HeartView"
 CWD=$(pwd)
 
-while getopts c:s: flag
+printf "Compiling App\n" > build.txt
+
+while getopts c:t:s: flag
 do
     case "${flag}" in
-        c) clearDirs=${OPTARG};;
-        s) clearSpec=${OPTARG};;
+        c) CLEAR=1;;
+        t) PACKAGETYPE=${OPTARG};;
+        s) CERTIFICATE=${OPTARG};;
     esac
 done
 
-if [[ $clearDirs -eq 1 ]]
+if [[ $CLEAR -eq 1 ]]
 then
-    rm -rf ./build ./dist
+    printf "\nClearing build and dist folders\n"
+    rm -rf ./build/ ./dist/
 fi
 
-if [[ $clearSpec -eq 1 ]]
+if [[ $PACKAGETYPE -eq 1 ]]
 then
-    rm "$FILENAME.spec"
-fi
-
-printf "\nGenerating macOS Distribution from HeartView.spec\nEnsure that pyenv is running with pyqt-venv-py3.7.7\n\n"
-sleep 2
-
-python3 -m PyInstaller \
-    --noconfirm \
-    --onedir \
-    --console \
-    --add-data="$CWD/README.md:." \
-    --add-data="$CWD/res/mac_fireball.jpg:res" \
-    --add-data="$CWD/res/McSCert_Logo.png:res" \
-    --add-data="$CWD/res/heartbeat.ico:res" \
-    --log-level=DEBUG \
-    --osx-bundle-identifier="Apple Development: Guy Meyer (VVJQ6Y9Y2X)" \
-    --name="$FILENAME" \
-    --icon="$CWD/res/heartbeat.ico" \
-    mainwindow.py 2> build.txt
+    printf "\nGenerating macOS Distribution from HeartView.spec as single file.\nEnsure that pyenv is running with py3.7.7\n"
+    sleep 2
     
-printf "\n\nCode Signing App..."
+    python3 -m PyInstaller --onefile --noconfirm --clean HeartView.spec 2> build.txt
+elif [[ $PACKAGETYPE -eq 0 ]]
+then
+    printf "\nGenerating macOS Distribution from HeartView.spec as single directory.\nEnsure that pyenv is running with py3.7.7\n"
+    sleep 2
 
-codesign -f -s "Apple Development: Guy Meyer (VVJQ6Y9Y2X)" dist/HeartView --deep
+    python3 -m PyInstaller --onedir --noconfirm --clean HeartView.spec 2> build.txt
+fi
 
-printf "\n\nFind Distro in \`dist\` folder\n"
+if [[ -n $code ]]  
+then
+    printf "\nCode Signing App...\n"
+    codesign -s "$CERTIFICATE" -v dist/HeartView.app --deep
+fi
+
+printf "\nFind Distro in \`dist\` folder\n"
