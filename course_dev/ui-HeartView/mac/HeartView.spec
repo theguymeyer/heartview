@@ -47,6 +47,6 @@ coll = COLLECT(exe,
                name='HeartView')
 app = BUNDLE(coll,
             name='HeartView.app',
-            icon='res/pixel-heart.icns',
+            icon='/Users/guy/Documents/heartview/course_dev/ui-HeartView/res/pixel-heart.icns',
             bundle_identifier='com.guymeyer.HeartView.ui',
             info_plist=pl)
