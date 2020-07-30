@@ -115,3 +115,9 @@ I was having code signing errors and the instructions by honey9 in this [post](h
 When testing on other machines, namely macs, I ran into several early stage problems. 
 
 1) Apps in Quaratine: Since from an unknown developer HeartView was quarantined by macOS Sierra Version 10.12.6. This [post](https://apple.stackexchange.com/questions/181026/lsopenurlswithrole-failed-with-error-10810-cant-open-install-os-x-yosemite) resolved the issue.
+
+2) Error loading Python lib... dlopen... libintl.8.dylib
+
+The issue here is no reverse compatability for MacOS applications. The answer was indicated [here](https://github.com/pyinstaller/pyinstaller/issues/3418). As explained, in order to create copy for High Sierra and back the app much be compiled on a very like Mavericks. 
+
+A viable solution as noted by **abulka** is to create a Mavericks copy on VMware and install the python, pyinstaller and the source code. The app should be forward compatible to High Sierra.
