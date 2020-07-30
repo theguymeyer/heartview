@@ -25,6 +25,8 @@ res/
 bin/
 
 # untracked files
+*.toc
+*.dot
 *.JPG
 *.jpg
 *.png
