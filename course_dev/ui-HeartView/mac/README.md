@@ -85,11 +85,11 @@ DESCRIPTION
 EXAMPLES
     The following is how to generate a one-file app for macOS
 
-        ./create_macOS_bundle_py2app.sh -t1 -c1 
+        ./create_macOS_bundle.sh -t1 -c1 
 
     The following is how to generate a one-file app for macOS with code signing
 
-        ./create_macOS_bundle_py2app.sh -t1 -s="Apple Development: Your Name (AAAA1A1A1A)" -c1 
+        ./create_macOS_bundle.sh -t1 -s="Apple Development: Your Name (AAAA1A1A1A)" -c1 
 ```
 
 ### Code Signing

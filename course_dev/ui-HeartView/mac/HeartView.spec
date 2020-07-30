@@ -11,7 +11,7 @@ a = Analysis(['mainwindow.py'],
              pathex=['/Users/guy/Documents/heartview/course_dev/ui-HeartView'],
              binaries=[],
              datas=[
-                ('/Users/guy/Documents/heartview/course_dev/ui-HeartView/README.md', '.'), 
+                ('/Users/guy/Documents/heartview/course_dev/ui-HeartView/mac/README.md', '.'), 
                 ('/Users/guy/Documents/heartview/course_dev/ui-HeartView/res/mac_fireball.jpg', 'res'), 
                 ('/Users/guy/Documents/heartview/course_dev/ui-HeartView/res/McSCert_Logo.png', 'res'), 
                 ('/Users/guy/Documents/heartview/course_dev/ui-HeartView/res/pixel-heart.icns', 'res')],
