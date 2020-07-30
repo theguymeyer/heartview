@@ -6,7 +6,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui  # Qt basics
 try:
     # Include in try/except block if you're also targeting Mac/Linux
     from PyQt5.QtWinExtras import QtWin
-    myappid = 'mycompany.myproduct.subproduct.version'
+    myappid = 'guymeyer.heartview.ui.v0'
     QtWin.setCurrentProcessExplicitAppUserModelID(myappid)    
 except ImportError:
     pass
@@ -38,7 +38,7 @@ class MainWindow(QtWidgets.QMainWindow):
         MainWindow.setObjectName(self, "MainWindow")
         MainWindow.resize(self, 1662, 512)
 
-        print("Boot HeartView...")
+        print("Booting HeartView...")
         
         # Create central widget
         self.centralWidget = QtGui.QWidget(self)
@@ -57,13 +57,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Create McSCert Logo
         self.logoMcSCertLabel = QtWidgets.QLabel(self)
-        pixmap1 = QtGui.QPixmap(os.getcwd() + "\\res\\McSCert_Logo.png")
+        pixmap1 = QtGui.QPixmap("res\\McSCert_Logo.png")
         pixmap1 = pixmap1.scaledToHeight(70)
         self.logoMcSCertLabel.setPixmap(pixmap1)
         
         # Create Mac Eng Logo
         self.logoMacEngLabel = QtWidgets.QLabel(self)
-        pixmap2 = QtGui.QPixmap(os.getcwd() + "\\res\\mac_fireball.jpg")
+        pixmap2 = QtGui.QPixmap("res\\mac_fireball.jpg")
         pixmap2 = pixmap2.scaledToHeight(70)
         self.logoMacEngLabel.setPixmap(pixmap2)
 
