@@ -19,6 +19,7 @@ from lib.plotter import *
 from lib.serial_interface import *
 from lib.toggle_switch import *
 from lib.printer import *
+from lib.tutorial import *
 # from lib.helper_functions import *
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -40,6 +41,9 @@ class MainWindow(QtWidgets.QMainWindow):
         # setup main layout
         self.mainLayout = QtGui.QHBoxLayout()
         self.centralWidget.setLayout(self.mainLayout)
+
+        # Tutorial Window
+        self.tr = TutorialWindow(self)
 
         # Printer Window
         self.pr = PrinterWindow(self)
@@ -232,6 +236,12 @@ class MainWindow(QtWidgets.QMainWindow):
 
         ##  ---------  START -- PyQt UI Setup  ---------  
 
+        ## Help Button
+        qta_help = qta.icon('mdi.help')
+        self.help = QtWidgets.QPushButton(qta_help, "")
+        self.help.setEnabled(True)
+        self.help.setFixedSize(50,50)
+
         ## setup layout
         self.__setupLayout()
 
@@ -335,6 +345,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # add plot controls
         plotButtons = QtGui.QHBoxLayout()
+        plotButtons.addWidget(self.help)
         plotButtons.addWidget(self.prnt)
         plotButtons.addWidget(self.stop)
         plotButtons.addWidget(self.start)
@@ -387,6 +398,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.prnt.clicked.connect(self.__generateReport)
 
+        self.help.clicked.connect(self.__showTutorial)
+
     ### SLOT FUNCTIONS ###
 
     # Public method to update the MainWindow StatusBar
@@ -405,6 +418,11 @@ class MainWindow(QtWidgets.QMainWindow):
     @QtCore.pyqtSlot()
     def __generateReport(self):
         self.pr.show()
+
+    @QtCore.pyqtSlot()
+    def __showTutorial(self):
+        self.tr.show()
+        self.activateWindow()
 
     @QtCore.pyqtSlot()
     def __sendTestRoutine(self):
