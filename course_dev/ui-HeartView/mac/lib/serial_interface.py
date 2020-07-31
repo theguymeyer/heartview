@@ -114,8 +114,8 @@ class SerialWidget(QtCore.QObject):
 
                             # if ADC data available convert it
                             convertedData = []
-                            for _ in range(4):  # take 4 values
-                                convertedData.append(self.helpers.adc2volts(data.pop(0)))
+                            for i in range(4):  # take 4 values
+                                convertedData.append(self.helpers.adc2volts(data.pop(0), (i < 2)))
 
                             # emit the signals 
                             # REMINDER - Incoming serial stream protocol:
