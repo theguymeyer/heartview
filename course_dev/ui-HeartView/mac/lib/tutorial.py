@@ -1,10 +1,10 @@
 '''
-Generate a Report Window
+Tutorial Window
 Author: Guy Meyer
-Date of Creation: July 2 2020
+Date of Creation: July 31 2020
 
-Simple UI that allows the user to build a report which is generated as a PDF.
-The user can select their desired sections and name the report
+UI to explain the functionality of the HeartView application. This UI should
+popup with focus upon boot, and be available to the user at all times.
 '''
 
 from PyQt5.QtWidgets import QApplication
