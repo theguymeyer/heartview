@@ -68,7 +68,7 @@ class Plotter(pg.PlotWidget):
         self.__updatePacemakerData()
 
         # fix height to 5Volts
-        self.setYRange(0,5000)
+        self.setYRange(-5000,5000)
 
 
     ### PRIVATE METHODS ###
