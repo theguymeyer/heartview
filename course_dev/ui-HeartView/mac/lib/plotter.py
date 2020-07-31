@@ -38,6 +38,7 @@ class Plotter(pg.PlotWidget):
         # axis labels
         self.setLabel("left", "Voltage (mV)")
         self.setLabel("bottom", "Time (ms)")
+
         
 
     ### SLOT FUNCTIONS ###
@@ -65,6 +66,9 @@ class Plotter(pg.PlotWidget):
     def update(self):
         self.__updateNaturalData()
         self.__updatePacemakerData()
+
+        # fix height to 5Volts
+        self.setYRange(0,5000)
 
 
     ### PRIVATE METHODS ###
