@@ -187,7 +187,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         qta_start = qta.icon('fa.play', color='green')
         self.start = QtWidgets.QPushButton(qta_start, "")
-        self.start.setEnabled(False)
+        self.start.setEnabled(True)
         self.start.setFixedSize(50,50)
 
         # Reset Plots
@@ -375,11 +375,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.refreshSerial.clicked.connect(self.updateSerialComboBox)
 
         # button clicks
-        # self.stop.clicked.connect(self.timerPlotter.stop)
-        self.stop.clicked.connect(self.toggleStartStopEnable)
+        self.stop.clicked.connect(self.timerPlotter.stop)
+        # self.stop.clicked.connect(self.toggleStartStopEnable)
         
-        # self.start.clicked.connect(self.timerPlotter.start)
-        self.start.clicked.connect(self.toggleStartStopEnable)
+        self.start.clicked.connect(self.timerPlotter.start)
+        # self.start.clicked.connect(self.toggleStartStopEnable)
         
         self.rst.clicked.connect(self.autoRangePlots)
         
@@ -435,23 +435,25 @@ class MainWindow(QtWidgets.QMainWindow):
         # realign plots
         self.autoRangePlots()
 
-    @QtCore.pyqtSlot()
-    def toggleStartStopEnable(self):
+    # THIS FUNCTION IS REMOVED - malfunctioning in other OS's
 
-        # clear serial to jump to most recent data
-        # Some data may need to be abandonded since it is a real-time system
-        self.ser.clearSerial()
+    # @QtCore.pyqtSlot()
+    # def toggleStartStopEnable(self):
 
-        if (self.start.isEnabled()):
-            self.start.setEnabled(False)
-            self.stop.setEnabled(True)
+    #     # clear serial to jump to most recent data
+    #     # Some data may need to be abandonded since it is a real-time system
+    #     self.ser.clearSerial()
 
-            self.timerPlotter.start(self.timestep)
-        else:
-            self.start.setEnabled(True)
-            self.stop.setEnabled(False)
+    #     if (self.start.isEnabled()):
+    #         self.start.setEnabled(False)
+    #         self.stop.setEnabled(True)
 
-            self.timerPlotter.stop()
+    #         self.timerPlotter.start(self.timestep)
+    #     else:
+    #         self.start.setEnabled(True)
+    #         self.stop.setEnabled(False)
+
+    #         self.timerPlotter.stop()
 
 
 
