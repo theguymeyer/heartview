@@ -7,20 +7,14 @@ Simple UI that allows the user to build a report which is generated as a PDF.
 The user can select their desired sections and name the report
 '''
 
-import sys, os
-# from fpdf import FPDF
 from PyQt5.QtWidgets import QApplication
 from PyQt5 import QtGui, QtWidgets, QtCore
-# from datetime import datetime
 
 import qtawesome as qta # fontawesome
-# import numpy as np  # numpy
 
 
 ## New window to display PDF Report options
 class TutorialWindow(QtGui.QMainWindow):
-
-    # filePATH = str(os.path.dirname(os.path.realpath("mainwindow.py")))
 
     def __init__(self, parent):
         super(TutorialWindow, self).__init__(parent)

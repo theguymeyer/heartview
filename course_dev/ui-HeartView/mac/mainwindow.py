@@ -387,10 +387,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # button clicks
         self.stop.clicked.connect(self.timerPlotter.stop)
-        # self.stop.clicked.connect(self.toggleStartStopEnable)
         
         self.start.clicked.connect(self.timerPlotter.start)
-        # self.start.clicked.connect(self.toggleStartStopEnable)
         
         self.rst.clicked.connect(self.autoRangePlots)
         
@@ -452,27 +450,6 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # realign plots
         self.autoRangePlots()
-
-    # THIS FUNCTION IS REMOVED - malfunctioning in other OS's
-
-    # @QtCore.pyqtSlot()
-    # def toggleStartStopEnable(self):
-
-    #     # clear serial to jump to most recent data
-    #     # Some data may need to be abandonded since it is a real-time system
-    #     self.ser.clearSerial()
-
-    #     if (self.start.isEnabled()):
-    #         self.start.setEnabled(False)
-    #         self.stop.setEnabled(True)
-
-    #         self.timerPlotter.start(self.timestep)
-    #     else:
-    #         self.start.setEnabled(True)
-    #         self.stop.setEnabled(False)
-
-    #         self.timerPlotter.stop()
-
 
 
     @QtCore.pyqtSlot()
