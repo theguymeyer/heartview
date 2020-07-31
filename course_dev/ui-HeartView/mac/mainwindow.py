@@ -75,7 +75,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Atrium
         self.atrLabel = QtWidgets.QLabel("Natural Atrium")
         self.atrLabel.setFont(labelFont)
-        self.atrSliderLabel = QtWidgets.QLabel("Pulse Width:")
+        self.atrSliderLabel = QtWidgets.QLabel("Pulse Width (ms):")
         self.atrSliderLabel.setFont(smallLabelFont)
         self.atrPushButton = ToggleSwitch(self)
 
@@ -92,7 +92,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Ventricle
         self.ventLabel = QtWidgets.QLabel("Natural Ventricle")
         self.ventLabel.setFont(labelFont)
-        self.ventSliderLabel = QtWidgets.QLabel("Pulse Width:")
+        self.ventSliderLabel = QtWidgets.QLabel("Pulse Width (ms):")
         self.ventSliderLabel.setFont(smallLabelFont)
         self.ventPushButton = ToggleSwitch(self)
 
@@ -109,7 +109,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Rate
         self.rateLabel = QtWidgets.QLabel("Natural Heart Rate")
         self.rateLabel.setFont(labelFont)
-        self.rateSliderLabel = QtWidgets.QLabel("BPM:")
+        self.rateSliderLabel = QtWidgets.QLabel("Beats Per Minute:")
         self.rateSliderLabel.setFont(smallLabelFont)
 
         self.rateSlider = Slider(tickPosition=QtGui.QSlider.TicksBelow,
@@ -125,7 +125,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # AV Delay
         self.avDelayLabel = QtWidgets.QLabel("Natural AV Delay")
         self.avDelayLabel.setFont(labelFont)
-        self.avSliderLabel = QtWidgets.QLabel("Duration:")
+        self.avSliderLabel = QtWidgets.QLabel("Duration (ms):")
         self.avSliderLabel.setFont(smallLabelFont)
         
         self.avDelaySlider = Slider(tickPosition=QtGui.QSlider.TicksBelow,
