@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['mainwindow_win.py'],
+a = Analysis(['C:\\Users\\Guy\\Documents\\pacemaker\\heartview\\course_dev\\ui-HeartView\\mainwindow_win.py'],
              pathex=['C:\\Users\\Guy\\Documents\\pacemaker\\heartview\\course_dev\\ui-HeartView'],
              binaries=[],
              datas=[('README.md', '.'), ('..\\res\\mac_fireball.jpg', 'res'), ('..\\res\\McSCert_Logo.png', 'res'), ('..\\res\\pixel-heart.ico', 'res')],

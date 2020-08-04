@@ -7,7 +7,7 @@ import plistlib
 with open('./Info.plist', 'rb') as fp:
     pl = plistlib.load(fp)
 
-a = Analysis(['mainwindow.py'],
+a = Analysis(['../mainwindow_mac.py'],
              pathex=['/Users/guy/Documents/heartview/course_dev/ui-HeartView'],
              binaries=[],
              datas=[
