@@ -60,6 +60,10 @@ Ensure that the correct libraries are installed using `pip3 freeze`. Key librari
 
 .. and confirm if applicable (yes, yes)
 
+**INFO PLIST**
+
+The info.plist file is a distribution file manadatory for OSx applications. The purpose of this file is to outline the bundle specification of the app. PyInstaller includes the info.plist file along with the bundle.
+
 ### Generating app
 
 A bundler script was created to automate the process of file generation, create_macOS_bundle.sh
