@@ -1,15 +1,6 @@
-import sys, threading, os
+import sys, threading
 
 from PyQt5 import QtCore, QtWidgets, QtGui  # Qt basics
-
-# Modify the 'application group' for windows distributions
-try:
-    # Include in try/except block if you're also targeting Mac/Linux
-    from PyQt5.QtWinExtras import QtWin
-    myappid = 'mycompany.myproduct.subproduct.version'
-    QtWin.setCurrentProcessExplicitAppUserModelID(myappid)    
-except ImportError:
-    pass
 
 # Plotting packages
 from pyqtgraph import PlotWidget, plot
@@ -28,6 +19,7 @@ from lib.plotter import *
 from lib.serial_interface import *
 from lib.toggle_switch import *
 from lib.printer import *
+from lib.tutorial import *
 # from lib.helper_functions import *
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -37,18 +29,21 @@ class MainWindow(QtWidgets.QMainWindow):
 
         MainWindow.setObjectName(self, "MainWindow")
         MainWindow.resize(self, 1662, 512)
-
-        print("Boot HeartView...")
         
+        print("Booting HeartView (macOS)...")
+
         # Create central widget
         self.centralWidget = QtGui.QWidget(self)
         self.setCentralWidget(self.centralWidget) 
         self.centralWidget.setObjectName("centralWidget")
-        self.setWindowTitle("Heart - Pacemaker Simulator")
+        self.setWindowTitle("HeartView - Heart Simulator")
 
         # setup main layout
         self.mainLayout = QtGui.QHBoxLayout()
         self.centralWidget.setLayout(self.mainLayout)
+
+        # Tutorial Window
+        self.tr = TutorialWindow(self)
 
         # Printer Window
         self.pr = PrinterWindow(self)
@@ -57,13 +52,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Create McSCert Logo
         self.logoMcSCertLabel = QtWidgets.QLabel(self)
-        pixmap1 = QtGui.QPixmap(os.getcwd() + "\\res\\McSCert_Logo.png")
+        pixmap1 = QtGui.QPixmap(QtCore.QCoreApplication.applicationDirPath() + '/res/McSCert_Logo.png')
         pixmap1 = pixmap1.scaledToHeight(70)
         self.logoMcSCertLabel.setPixmap(pixmap1)
         
         # Create Mac Eng Logo
         self.logoMacEngLabel = QtWidgets.QLabel(self)
-        pixmap2 = QtGui.QPixmap(os.getcwd() + "\\res\\mac_fireball.jpg")
+        pixmap2 = QtGui.QPixmap(QtCore.QCoreApplication.applicationDirPath() + '/res/mac_fireball.jpg')
         pixmap2 = pixmap2.scaledToHeight(70)
         self.logoMacEngLabel.setPixmap(pixmap2)
 
@@ -84,7 +79,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Atrium
         self.atrLabel = QtWidgets.QLabel("Natural Atrium")
         self.atrLabel.setFont(labelFont)
-        self.atrSliderLabel = QtWidgets.QLabel("Pulse Width:")
+        self.atrSliderLabel = QtWidgets.QLabel("Pulse Width (ms):")
         self.atrSliderLabel.setFont(smallLabelFont)
         self.atrPushButton = ToggleSwitch(self)
 
@@ -101,7 +96,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Ventricle
         self.ventLabel = QtWidgets.QLabel("Natural Ventricle")
         self.ventLabel.setFont(labelFont)
-        self.ventSliderLabel = QtWidgets.QLabel("Pulse Width:")
+        self.ventSliderLabel = QtWidgets.QLabel("Pulse Width (ms):")
         self.ventSliderLabel.setFont(smallLabelFont)
         self.ventPushButton = ToggleSwitch(self)
 
@@ -118,7 +113,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Rate
         self.rateLabel = QtWidgets.QLabel("Natural Heart Rate")
         self.rateLabel.setFont(labelFont)
-        self.rateSliderLabel = QtWidgets.QLabel("BPM:")
+        self.rateSliderLabel = QtWidgets.QLabel("Beats Per Minute:")
         self.rateSliderLabel.setFont(smallLabelFont)
 
         self.rateSlider = Slider(tickPosition=QtGui.QSlider.TicksBelow,
@@ -134,7 +129,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # AV Delay
         self.avDelayLabel = QtWidgets.QLabel("Natural AV Delay")
         self.avDelayLabel.setFont(labelFont)
-        self.avSliderLabel = QtWidgets.QLabel("Duration:")
+        self.avSliderLabel = QtWidgets.QLabel("Duration (ms):")
         self.avSliderLabel.setFont(smallLabelFont)
         
         self.avDelaySlider = Slider(tickPosition=QtGui.QSlider.TicksBelow,
@@ -196,7 +191,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         qta_start = qta.icon('fa.play', color='green')
         self.start = QtWidgets.QPushButton(qta_start, "")
-        self.start.setEnabled(False)
+        self.start.setEnabled(True)
         self.start.setFixedSize(50,50)
 
         # Reset Plots
@@ -240,6 +235,12 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
         ##  ---------  START -- PyQt UI Setup  ---------  
+
+        ## Help Button
+        qta_help = qta.icon('mdi.help')
+        self.help = QtWidgets.QPushButton(qta_help, "")
+        self.help.setEnabled(True)
+        self.help.setFixedSize(50,50)
 
         ## setup layout
         self.__setupLayout()
@@ -344,6 +345,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # add plot controls
         plotButtons = QtGui.QHBoxLayout()
+        plotButtons.addWidget(self.help)
         plotButtons.addWidget(self.prnt)
         plotButtons.addWidget(self.stop)
         plotButtons.addWidget(self.start)
@@ -384,17 +386,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self.refreshSerial.clicked.connect(self.updateSerialComboBox)
 
         # button clicks
-        # self.stop.clicked.connect(self.timerPlotter.stop)
-        self.stop.clicked.connect(self.toggleStartStopEnable)
+        self.stop.clicked.connect(self.timerPlotter.stop)
         
-        # self.start.clicked.connect(self.timerPlotter.start)
-        self.start.clicked.connect(self.toggleStartStopEnable)
+        self.start.clicked.connect(self.timerPlotter.start)
         
         self.rst.clicked.connect(self.autoRangePlots)
         
         self.send.clicked.connect(self.__sendTestRoutine)
 
         self.prnt.clicked.connect(self.__generateReport)
+
+        self.help.clicked.connect(self.__showTutorial)
 
     ### SLOT FUNCTIONS ###
 
@@ -414,6 +416,11 @@ class MainWindow(QtWidgets.QMainWindow):
     @QtCore.pyqtSlot()
     def __generateReport(self):
         self.pr.show()
+
+    @QtCore.pyqtSlot()
+    def __showTutorial(self):
+        self.tr.show()
+        self.activateWindow()
 
     @QtCore.pyqtSlot()
     def __sendTestRoutine(self):
@@ -443,25 +450,6 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # realign plots
         self.autoRangePlots()
-
-    @QtCore.pyqtSlot()
-    def toggleStartStopEnable(self):
-
-        # clear serial to jump to most recent data
-        # Some data may need to be abandonded since it is a real-time system
-        self.ser.clearSerial()
-
-        if (self.start.isEnabled()):
-            self.start.setEnabled(False)
-            self.stop.setEnabled(True)
-
-            self.timerPlotter.start(self.timestep)
-        else:
-            self.start.setEnabled(True)
-            self.stop.setEnabled(False)
-
-            self.timerPlotter.stop()
-
 
 
     @QtCore.pyqtSlot()

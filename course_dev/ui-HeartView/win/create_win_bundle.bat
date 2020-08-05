@@ -8,15 +8,9 @@ set filename=HeartView
 RMDIR /S /Q .\build\ .\dist\
 
 :PyInstaller
-pyinstaller.exe ^
-    --noconfirm ^
-    --onefile ^
-    --console ^
-    --add-data="README.md;." ^
-    --add-data="res\mac_fireball.jpg;res" ^
-    --add-data="res\McSCert_Logo.png;res" ^
-    --add-data="res\pixel-heart.ico;res" ^
-    --log-level=DEBUG ^
-    --name=%filename% ^
-    --icon=.\res\pixel-heart.ico ^
-    heartview_win.spec 1> build.txt
+START /WAIT pyinstaller.exe --noconfirm --onefile --window heartview_win.spec
+
+:CopyImages
+MKDIR .\dist\res\
+COPY ..\res\McSCert_Logo.png .\dist\res\
+COPY ..\res\mac_fireball.jpg .\dist\res\

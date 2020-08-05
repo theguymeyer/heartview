@@ -7,7 +7,7 @@ import plistlib
 with open('./Info.plist', 'rb') as fp:
     pl = plistlib.load(fp)
 
-a = Analysis(['mainwindow.py'],
+a = Analysis(['../mainwindow_mac.py'],
              pathex=['/Users/guy/Documents/heartview/course_dev/ui-HeartView'],
              binaries=[],
              datas=[
@@ -47,6 +47,6 @@ coll = COLLECT(exe,
                name='HeartView')
 app = BUNDLE(coll,
             name='HeartView.app',
-            icon='res/pixel-heart.icns',
+            icon='/Users/guy/Documents/heartview/course_dev/ui-HeartView/res/pixel-heart.icns',
             bundle_identifier='com.guymeyer.HeartView.ui',
             info_plist=pl)
