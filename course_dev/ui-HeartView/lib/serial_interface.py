@@ -85,7 +85,7 @@ class SerialWidget(QtCore.QObject):
     @QtCore.pyqtSlot()
     def startSerialRead(self):
 
-        # print('Serial Thread:\t', threading.get_ident())
+        print('Serial Thread:\t', threading.get_ident())
 
         # ensure that serial is open
         if(not self.isSerialOpen()):
@@ -95,8 +95,13 @@ class SerialWidget(QtCore.QObject):
             raw = []
 
             # get all the available data
-            if (self.ser.bytesAvailable() > 0):
+            if (self.ser.bytesAvailable() > 6000):
+                self.clearSerial()
+                return None
+            elif (self.ser.bytesAvailable() > 0):
+                print("PRE - Ser Read\t", self.ser.bytesAvailable())
                 raw = self.ser.readAll()
+                print("POST - Ser Read")
 
             # split list of bytes
             data = list(raw)
