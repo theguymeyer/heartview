@@ -415,9 +415,7 @@ class MainWindow(QtWidgets.QMainWindow):
     @QtCore.pyqtSlot()
     def startPlotting(self):
         self.autoRangePlots()
-        print("PRE - Starting!!!!")
         self.timerPlotter.start(self.timestep)
-        print("POST - Starting!!!!")
 
     # Public method to update the MainWindow StatusBar
     @QtCore.pyqtSlot(str)

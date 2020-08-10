@@ -65,13 +65,10 @@ class Plotter(pg.PlotWidget):
 
     @QtCore.pyqtSlot()
     def update(self):
-        print("PRE - Update")
         self.setVoltRange()
         
         self.__updateNaturalData()
         self.__updatePacemakerData()
-        print("POST - Update")
-
 
     @QtCore.pyqtSlot()
     def updateFrameSize(self):
