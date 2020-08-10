@@ -28,6 +28,7 @@ from lib.plotter import *
 from lib.serial_interface import *
 from lib.toggle_switch import *
 from lib.printer import *
+from lib.tutorial import *
 # from lib.helper_functions import *
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -38,7 +39,7 @@ class MainWindow(QtWidgets.QMainWindow):
         MainWindow.setObjectName(self, "MainWindow")
         MainWindow.resize(self, 1662, 512)
 
-        print("Booting HeartView...")
+        print("Booting HeartView (windows)...")
         
         # Create central widget
         self.centralWidget = QtGui.QWidget(self)
@@ -50,6 +51,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.mainLayout = QtGui.QHBoxLayout()
         self.centralWidget.setLayout(self.mainLayout)
 
+        # Tutorial Window
+        self.tr = TutorialWindow(self)
+        
         # Printer Window
         self.pr = PrinterWindow(self)
 
