@@ -23,6 +23,7 @@ class Plotter(pg.PlotWidget):
         # init data
         self.stepSize = round(1.0/2.3116,8)    # plotting rate
         self.frameSize = frameSize    # number of data points shown at once
+        self.widgetWidth = self.frameGeometry().width()
         self.timesteps = np.arange(0, self.frameSize * self.stepSize, self.stepSize)
         self.dataNatural = np.transpose([self.timesteps, np.random.rand(self.frameSize)])
         self.dataPacemaker = np.transpose([self.timesteps, np.random.rand(self.frameSize)])
@@ -39,7 +40,7 @@ class Plotter(pg.PlotWidget):
         self.setLabel("left", "Voltage (mV)")
         self.setLabel("bottom", "Time (ms)")
 
-        
+    
 
     ### SLOT FUNCTIONS ###
 
@@ -64,12 +65,20 @@ class Plotter(pg.PlotWidget):
 
     @QtCore.pyqtSlot()
     def update(self):
+        self.setVoltRange()
+        
         self.__updateNaturalData()
         self.__updatePacemakerData()
 
+    @QtCore.pyqtSlot()
+    def updateFrameSize(self):
+        self.frameSize = round(self.frameSize * self.widgetWidth / self.frameGeometry().width() ,0)
+
+    ### PUBLIC METHODS ###
+
+    def setVoltRange(self):
         # fix height to 5Volts
         self.setYRange(-5000,5000)
-
 
     ### PRIVATE METHODS ###
 

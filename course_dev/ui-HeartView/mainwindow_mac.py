@@ -166,10 +166,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         ## init graphics window
         self.atrPlot = Plotter(title="Atrium Signals", frameSize=int(1e4), enableMenu=False)
-        self.atrPlot.setYRange(0,5000)
+        self.atrPlot.setVoltRange()
 
         self.ventPlot = Plotter(title="Ventricle Signals", frameSize=int(1e4))
-        self.ventPlot.setYRange(0,5000)
+        self.ventPlot.setVoltRange()
 
         self.autoRangePlots()
 
@@ -364,6 +364,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def __connectionsList(self):
         
         # timer signals
+        self.timerPlotter.timeout.connect(self.autoRangePlots)
         self.timerPlotter.timeout.connect(self.ser.startSerialRead)
         self.timerPlotter.timeout.connect(self.atrPlot.update)
         self.timerPlotter.timeout.connect(self.ventPlot.update)
@@ -388,7 +389,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # button clicks
         self.stop.clicked.connect(self.timerPlotter.stop)
         
-        self.start.clicked.connect(self.timerPlotter.start)
+        self.start.clicked.connect(self.startPlotting)
         
         self.rst.clicked.connect(self.autoRangePlots)
         
@@ -398,7 +399,23 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.help.clicked.connect(self.__showTutorial)
 
+
+    def resizeEvent(self, event):
+        # print("resize")
+        # QtGui.QMainWindow.resizeEvent(self, event)
+
+        self.atrPlot.updateFrameSize()
+        self.ventPlot.updateFrameSize()
+
+        self.autoRangePlots()
+
     ### SLOT FUNCTIONS ###
+
+    # Public method to update the MainWindow StatusBar
+    @QtCore.pyqtSlot()
+    def startPlotting(self):
+        self.autoRangePlots()
+        self.timerPlotter.start(self.timestep)
 
     # Public method to update the MainWindow StatusBar
     @QtCore.pyqtSlot(str)
@@ -451,11 +468,12 @@ class MainWindow(QtWidgets.QMainWindow):
         # realign plots
         self.autoRangePlots()
 
-
     @QtCore.pyqtSlot()
     def autoRangePlots(self):
         self.atrPlot.enableAutoRange()
         self.ventPlot.enableAutoRange()
+        self.atrPlot.setVoltRange()
+        self.ventPlot.setVoltRange()
 
 
 app = QtWidgets.QApplication([])
