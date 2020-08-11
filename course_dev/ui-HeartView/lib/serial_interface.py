@@ -94,7 +94,7 @@ class SerialWidget(QtCore.QObject):
         try:
             raw = []
 
-            if (self.ser.bytesAvailable() > 6000):
+            if (self.ser.bytesAvailable() > 8500):
                 ## I hate this hack! 
                 # What's essentially happening is that too much data results in this malloc error...
                 #   Python(2254,0x111685dc0) malloc: *** error for object 0x7f83287b2000: pointer being freed was not allocated
@@ -108,10 +108,8 @@ class SerialWidget(QtCore.QObject):
                 self.clearSerial()
                 return None
             elif (self.ser.bytesAvailable() > 0):
-                print("PRE - Ser Read\t", self.ser.bytesAvailable())
                 # get all the available data
                 raw = self.ser.readAll()
-                print("POST - Ser Read")
 
             # split list of bytes
             data = list(raw)
