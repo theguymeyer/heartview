@@ -22,7 +22,7 @@
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>MacOS/mainwindow</string>
+	<string>MacOS/HeartView</string>
 	<key>CFBundleIconFile</key>
 	<string>pixel-heart.icns</string>
 	<key>CFBundleIdentifier</key>
