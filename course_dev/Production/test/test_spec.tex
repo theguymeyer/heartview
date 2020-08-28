@@ -1,0 +1,187 @@
+\documentclass[]{article}
+
+%opening
+\title{Testing specification for HeartView Test Station}
+\author{Guy Meyer}
+
+\begin{document}
+	
+\setlength\parindent{0pt}
+
+\maketitle
+
+\begin{abstract}
+The HeartView project is a functional testing platform for pacemaker prototypes developed on the FRDM K64F. In addition, the pacemaker is connected via two 4-lead ribbon cables (the electrodes) to an IO system that mimics the operations of the heart. The IO system collects functional signal data using UART and streams the information to be displayed in the HeartView UI, where the heart's functionality can be modified in real-time. As such it is crucial that its components undergo verification and validation as a threshold of compliance. This document describes the set of automated and unit tests to be performed prior to packaging the test station. 
+\end{abstract}
+
+\section{Assumptions}
+
+\begin{enumerate}
+	\item The HeartView test station is assembled:
+	\begin{itemize}
+		\item Includes both boards
+		\item Both shields are mounted
+		\item All components are secured with nuts and bolts
+		\item Thread-lock is applied to all nuts and bolts
+		\item Cables (Electrodes) are connected
+	\end{itemize}
+
+	\item Both boards are connected to the test computer once the automated test is initiated
+\end{enumerate}
+
+\section{Testing Structure}
+The test routine is structured so that all units uphold the same level of compliance. The same routine is to be followed for all boards. \\
+
+\subsection{Operator Instructions}
+\begin{enumerate}
+	\item Connect test station to the first test computer using the two USB ports (to FRDM and Nucleo boards). 
+	\item Initiate the automated test routine
+	\item Upon completion, record the results
+	\item Disconnect from first test computer
+	\item Perform mechanical test (see Section \ref{sec:mech_test})
+	\item Connect to second test computer
+	\item Initiate automated test routine
+	\item Upon completion disconnect board from second computer and more to packaging station
+	\item Apply compliance sticker OR write `VS' on Test Station with sharpie to denote a Verified Station
+\end{enumerate}
+
+Note: to increase testing efficiency it is possible to disconnect the 
+
+\subsection{Automated Test Routine}
+
+\begin{enumerate}
+	\item Correlate serial ports to correct boards
+	\item Flash test binary to K64F
+	\item Flash firmware to Nucleo
+	\item Perform AT1 $\rightarrow$ log result
+	\item Perform AT2 $\rightarrow$ log result
+	\item Perform AT3 $\rightarrow$ log result
+	\item Perform AT4 $\rightarrow$ log result
+	\item Indicate PASS/FAIL and when safe to disconnect
+	
+\end{enumerate}
+
+\section{Automated Tests - Electrical/Firmware}
+\subsection{AT1 - Serial Communication for FRDM K64F}
+The serial port for the FRDM K64F (denoted by `OpenSDA') is the communications entry point useful for loading binaries, and performing serial communication with the DCM.\\
+
+To verify communication between the board and a host computer it is necessary to perform two way communication. The objective is to ensure that the correct device is communicating and that UART is operational. \\
+
+\underline{Assumption:} The test binary has already been flashed when this test is initiated.\\
+
+The automated script in the host computer will behave as follows:
+\begin{enumerate}
+	\item Send input message to FRDM K64F
+	\item Await output message $\rightarrow$ timeout in 5 seconds
+	\item \textbf{IF} received correct output: log ``PASS" \textbf{ELSE}: log ``FAIL"
+\end{enumerate}
+
+\subsubsection{Test Binary}\label{sec:test_bin_k64f}
+The Test Binary is a ready made program intended to be flashed on the K64F that listens to the serial port and will return an outbound acknowledgment message when specific inbound message is sent.\\
+
+Expected input message is ``hello" in ASCII: \{0x68, 0x64, 0x6C, 0x6C, 0x6F\}\\
+Expected output message is ``k64f'' in ASCII: \{0x6B, 0x36, 0x34, 0x66\}\\
+
+The binary also includes functions that accept serial input and generate a pulse based on the characteristics described in the message. The message structure is as follows:\\
+
+\begin{center}
+	\textbf{HEX $\rightarrow$ \ \{chamber, pulse amplitude, pulse width\}}\\
+\end{center}
+
+\begin{itemize}
+	\item Chamber $\rightarrow$ Atrium (0x00), Ventricle (0x01)
+	\item Pulse Amplitude $\rightarrow$ from 0 to 5 (volts) (integers)
+	\item Pulse Width $\rightarrow$ form 0 to 10 (ms) (integers)
+\end{itemize}
+
+\subsection{AT2 - Serial Communication for NUCLEO F446RE}
+
+The serial port for the Nucleo F446RE is the communications entry point useful for loading binaries, and performing serial communication with HeartView.\\
+
+To verify communication between the board and a host computer it is necessary to test with two way communication. The objective is to ensure that the correct device is communicating and that UART is operational. \\
+
+\underline{Assumption:} The firmware has already been flashed when this test is initiated.\\
+
+The automated script in the host computer will behave as follows:
+\begin{enumerate}
+	\item Send input message to Nucleo F446RE
+	\item Await output message $\rightarrow$ timeout in 5 seconds
+	\item \textbf{IF} received correct output: log ``PASS" \textbf{ELSE}: log ``FAIL"
+\end{enumerate}
+
+\subsubsection{Nucleo Firmware}
+A binary file which includes all the necessary functionality of the I/O Heart System. The Nucleo is responsible for reading heart and pacemaker activity, communicating data to the host computer (HeartView UI), generating square pulse signals at consistent periods, and updating pulse settings dynamically via serial input.\\
+
+To verify UART, the firmware includes an acknowledgment function which outputs a message in response to a specific serial input.\\
+
+Expected input message is 4x NULL in ASCII: \{0x00, 0x00, 0x00, 0x00\}\\
+Expected output message is ``f446'' in ASCII: \{0x66, 0x34, 0x34, 0x36\}\\
+
+\subsection{AT3 - Signal Generation by FRDM K64F}
+
+To verify correctness for pulse generation by the K64F, a set of pulses will be generated by the K64F and read using the Nucleo. Their values will be tracked and verified within a tolerance (TODO dictate tolerance). By generating several pulses, the tester can be confident in the correctness of the PCB mounted on top of the K64F (pacemaker), along with the input circuitry of the heart PCB and the ADC/UART transmit of the Nucleo.\\
+
+\underline{Assumption:} The test binary has already been flashed when this test is initiated.\\
+
+Reference section \ref{sec:test_bin_k64f}) which describes how pulses are generated on command.\\
+
+The automated script in the host computer will behave as follows:
+\begin{enumerate}
+	\item \textbf{\underline{Test}: Atrium, 5V Amp, 10ms PW $\rightarrow$ \{0x00, 0x05, 0x0A\}}
+	\item Await detection by Nucleo $\rightarrow$ timeout in 3 seconds
+	\item \textbf{IF} received correct output: log ``PASS" \textbf{ELSE}: log ``FAIL"
+	
+	\item \textbf{\underline{Test}: Ventricle, 5V Amp, 10ms PW $\rightarrow$ \{0x01, 0x05, 0x0A\}}
+	\item Await detection by Nucleo $\rightarrow$ timeout in 3 seconds
+	\item \textbf{IF} received correct output: log ``PASS" \textbf{ELSE}: log ``FAIL"
+	
+	\item \textbf{\underline{Test}: Atrium, 2V Amp, 1ms PW $\rightarrow$ \{0x00, 0x02, 0x01\}}
+	\item Await detection by Nucleo $\rightarrow$ timeout in 3 seconds
+	\item \textbf{IF} received correct output: log ``PASS" \textbf{ELSE}: log ``FAIL"
+	
+	\item \textbf{\underline{Test}: Ventricle, 2V Amp, 1ms PW $\rightarrow$ \{0x01, 0x02, 0x01\}}
+	\item Await detection by Nucleo $\rightarrow$ timeout in 3 seconds
+	\item \textbf{IF} received correct output: log ``PASS" \textbf{ELSE}: log ``FAIL"
+\end{enumerate}
+
+
+\subsection{AT4 - Signal Generation by NUCLEO F446RE}
+
+To verify correctness for pulse generation by the Nucleo F446RE, a set of pulses will be generated by the Nucleo and read using the FRDM K64F. Their values will be tracked and verified within a tolerance (TODO dictate tolerance). By generating several pulses, the tester can be confident in the correctness of the PCB mounted on top of the Nucleo (Heart), along with the Sensing circuitry of the pacemaker and the UART transmit of the K64F.\\
+
+\underline{Assumption:} The test binary has already been flashed when this test is initiated.\\
+
+Reference section \ref{sec:test_bin_k64f}) which describes how pulses are generated on command.\\
+
+The automated script in the host computer will behave as follows:
+\begin{enumerate}
+	\item \textbf{\underline{Test}: Atrium, 5V Amp, 10ms PW $\rightarrow$ \{0x00, 0x05, 0x0A\}}
+	\item Await detection by Nucleo $\rightarrow$ timeout in 3 seconds
+	\item \textbf{IF} received correct output: log ``PASS" \textbf{ELSE}: log ``FAIL"
+	
+	\item \textbf{\underline{Test}: Ventricle, 5V Amp, 10ms PW $\rightarrow$ \{0x01, 0x05, 0x0A\}}
+	\item Await detection by Nucleo $\rightarrow$ timeout in 3 seconds
+	\item \textbf{IF} received correct output: log ``PASS" \textbf{ELSE}: log ``FAIL"
+	
+	\item \textbf{\underline{Test}: Atrium, 2V Amp, 1ms PW $\rightarrow$ \{0x00, 0x02, 0x01\}}
+	\item Await detection by Nucleo $\rightarrow$ timeout in 3 seconds
+	\item \textbf{IF} received correct output: log ``PASS" \textbf{ELSE}: log ``FAIL"
+	
+	\item \textbf{\underline{Test}: Ventricle, 2V Amp, 1ms PW $\rightarrow$ \{0x01, 0x02, 0x01\}}
+	\item Await detection by Nucleo $\rightarrow$ timeout in 3 seconds
+	\item \textbf{IF} received correct output: log ``PASS" \textbf{ELSE}: log ``FAIL"
+\end{enumerate}
+
+\section{Unit Tests}
+
+\section{Mechanical Tests}\label{sec:mech_test}
+\subsection{Vibrations}
+In later components of the project, participants are expected to shake the testing system in order to test rate adaptivity cause by increase heart rate due to physical activity (walking, jogging, running). Users will shake the system vigorously for prolonged periods of time so to excite the on-board accelerometer.\\
+
+In order to verify that the unit is structurally robust, the assembly team must perform the automated tests, then vigorously shake the unit for thirty (30) seconds, and finally perform an additional automated routine to verify correct functionality. In addition, the assembler must check the nuts and bolts for weaknesses. \\
+
+The assumption for this test is that if the product is not physically robust then it will; 1) fail to pass the second round of automated tests due to mechanical failure of circuitry, 2) nuts and bolts will unwind as the system vibrates. 
+
+\section{UI Tests}
+
+\end{document}
