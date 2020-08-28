@@ -28,6 +28,7 @@ from lib.plotter import *
 from lib.serial_interface import *
 from lib.toggle_switch import *
 from lib.printer import *
+from lib.tutorial import *
 # from lib.helper_functions import *
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -37,22 +38,25 @@ class MainWindow(QtWidgets.QMainWindow):
 
         MainWindow.setObjectName(self, "MainWindow")
         MainWindow.resize(self, 1662, 512)
-
-        print("Booting HeartView...")
         
+        print("Booting HeartView (win10)...")
+
         # Create central widget
         self.centralWidget = QtGui.QWidget(self)
         self.setCentralWidget(self.centralWidget) 
         self.centralWidget.setObjectName("centralWidget")
-        self.setWindowTitle("Heart - Pacemaker Simulator")
+        self.setWindowTitle("HeartView - Heart Simulator")
 
         # setup main layout
         self.mainLayout = QtGui.QHBoxLayout()
         self.centralWidget.setLayout(self.mainLayout)
 
+        # Tutorial Window
+        self.tr = TutorialWindow(self)
+
         # Printer Window
         self.pr = PrinterWindow(self)
-
+        
         ##  --------- START -- Icons and Images  ---------  
 
         # Create McSCert Logo
@@ -84,7 +88,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Atrium
         self.atrLabel = QtWidgets.QLabel("Natural Atrium")
         self.atrLabel.setFont(labelFont)
-        self.atrSliderLabel = QtWidgets.QLabel("Pulse Width:")
+        self.atrSliderLabel = QtWidgets.QLabel("Pulse Width (ms):")
         self.atrSliderLabel.setFont(smallLabelFont)
         self.atrPushButton = ToggleSwitch(self)
 
@@ -101,7 +105,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Ventricle
         self.ventLabel = QtWidgets.QLabel("Natural Ventricle")
         self.ventLabel.setFont(labelFont)
-        self.ventSliderLabel = QtWidgets.QLabel("Pulse Width:")
+        self.ventSliderLabel = QtWidgets.QLabel("Pulse Width (ms):")
         self.ventSliderLabel.setFont(smallLabelFont)
         self.ventPushButton = ToggleSwitch(self)
 
@@ -118,7 +122,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Rate
         self.rateLabel = QtWidgets.QLabel("Natural Heart Rate")
         self.rateLabel.setFont(labelFont)
-        self.rateSliderLabel = QtWidgets.QLabel("BPM:")
+        self.rateSliderLabel = QtWidgets.QLabel("Beats Per Minute:")
         self.rateSliderLabel.setFont(smallLabelFont)
 
         self.rateSlider = Slider(tickPosition=QtGui.QSlider.TicksBelow,
@@ -134,7 +138,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # AV Delay
         self.avDelayLabel = QtWidgets.QLabel("Natural AV Delay")
         self.avDelayLabel.setFont(labelFont)
-        self.avSliderLabel = QtWidgets.QLabel("Duration:")
+        self.avSliderLabel = QtWidgets.QLabel("Duration (ms):")
         self.avSliderLabel.setFont(smallLabelFont)
         
         self.avDelaySlider = Slider(tickPosition=QtGui.QSlider.TicksBelow,
@@ -171,10 +175,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         ## init graphics window
         self.atrPlot = Plotter(title="Atrium Signals", frameSize=int(1e4), enableMenu=False)
-        self.atrPlot.setYRange(0,5000)
+        self.atrPlot.setVoltRange()
 
         self.ventPlot = Plotter(title="Ventricle Signals", frameSize=int(1e4))
-        self.ventPlot.setYRange(0,5000)
+        self.ventPlot.setVoltRange()
 
         self.autoRangePlots()
 
@@ -196,7 +200,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         qta_start = qta.icon('fa.play', color='green')
         self.start = QtWidgets.QPushButton(qta_start, "")
-        self.start.setEnabled(False)
+        self.start.setEnabled(True)
         self.start.setFixedSize(50,50)
 
         # Reset Plots
@@ -240,6 +244,12 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
         ##  ---------  START -- PyQt UI Setup  ---------  
+
+        ## Help Button
+        qta_help = qta.icon('mdi.help')
+        self.help = QtWidgets.QPushButton(qta_help, "")
+        self.help.setEnabled(True)
+        self.help.setFixedSize(50,50)
 
         ## setup layout
         self.__setupLayout()
@@ -344,6 +354,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # add plot controls
         plotButtons = QtGui.QHBoxLayout()
+        plotButtons.addWidget(self.help)
         plotButtons.addWidget(self.prnt)
         plotButtons.addWidget(self.stop)
         plotButtons.addWidget(self.start)
@@ -362,6 +373,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def __connectionsList(self):
         
         # timer signals
+        self.timerPlotter.timeout.connect(self.autoRangePlots)
         self.timerPlotter.timeout.connect(self.ser.startSerialRead)
         self.timerPlotter.timeout.connect(self.atrPlot.update)
         self.timerPlotter.timeout.connect(self.ventPlot.update)
@@ -384,11 +396,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.refreshSerial.clicked.connect(self.updateSerialComboBox)
 
         # button clicks
-        # self.stop.clicked.connect(self.timerPlotter.stop)
-        self.stop.clicked.connect(self.toggleStartStopEnable)
+        self.stop.clicked.connect(self.timerPlotter.stop)
         
-        # self.start.clicked.connect(self.timerPlotter.start)
-        self.start.clicked.connect(self.toggleStartStopEnable)
+        self.start.clicked.connect(self.startPlotting)
         
         self.rst.clicked.connect(self.autoRangePlots)
         
@@ -396,7 +406,25 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.prnt.clicked.connect(self.__generateReport)
 
+        self.help.clicked.connect(self.__showTutorial)
+
+
+    def resizeEvent(self, event):
+        # print("resize")
+        # QtGui.QMainWindow.resizeEvent(self, event)
+
+        self.atrPlot.updateFrameSize()
+        self.ventPlot.updateFrameSize()
+
+        self.autoRangePlots()
+
     ### SLOT FUNCTIONS ###
+
+    # Public method to update the MainWindow StatusBar
+    @QtCore.pyqtSlot()
+    def startPlotting(self):
+        self.autoRangePlots()
+        self.timerPlotter.start(self.timestep)
 
     # Public method to update the MainWindow StatusBar
     @QtCore.pyqtSlot(str)
@@ -414,6 +442,11 @@ class MainWindow(QtWidgets.QMainWindow):
     @QtCore.pyqtSlot()
     def __generateReport(self):
         self.pr.show()
+
+    @QtCore.pyqtSlot()
+    def __showTutorial(self):
+        self.tr.show()
+        self.activateWindow()
 
     @QtCore.pyqtSlot()
     def __sendTestRoutine(self):
@@ -445,29 +478,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.autoRangePlots()
 
     @QtCore.pyqtSlot()
-    def toggleStartStopEnable(self):
-
-        # clear serial to jump to most recent data
-        # Some data may need to be abandonded since it is a real-time system
-        self.ser.clearSerial()
-
-        if (self.start.isEnabled()):
-            self.start.setEnabled(False)
-            self.stop.setEnabled(True)
-
-            self.timerPlotter.start(self.timestep)
-        else:
-            self.start.setEnabled(True)
-            self.stop.setEnabled(False)
-
-            self.timerPlotter.stop()
-
-
-
-    @QtCore.pyqtSlot()
     def autoRangePlots(self):
         self.atrPlot.enableAutoRange()
         self.ventPlot.enableAutoRange()
+        self.atrPlot.setVoltRange()
+        self.ventPlot.setVoltRange()
 
 
 app = QtWidgets.QApplication([])
