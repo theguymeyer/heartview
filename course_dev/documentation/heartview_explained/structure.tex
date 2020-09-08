@@ -20,7 +20,7 @@
 %----------------------------------------------------------------------------------------
 
 \usepackage{graphicx} % Required for including pictures
-\graphicspath{{Pictures/}} % Specifies the directory where pictures are stored
+\graphicspath{{res/}} % Specifies the directory where pictures are stored
 
 \usepackage{lipsum} % Inserts dummy text
 
@@ -70,9 +70,13 @@
 %	BIBLIOGRAPHY AND INDEX
 %----------------------------------------------------------------------------------------
 
-\usepackage[style=numeric,citestyle=numeric,sorting=nyt,sortcites=true,autopunct=true,babel=hyphen,hyperref=true,abbreviate=false,backref=true,backend=biber]{biblatex}
-\addbibresource{bibliography.bib} % BibTeX bibliography file
-\defbibheading{bibempty}{}
+% original source code - broken for my installtion
+%\usepackage[style=numeric,citestyle=numeric,sorting=nyt,sortcites=true,autopunct=true,babel=hyphen,hyperref=true,abbreviate=false,backref=true,backend=biber]{biblatex}
+%\addbibresource{bibliography.bib} % BibTeX bibliography file
+%\defbibheading{bibempty}{}
+
+\usepackage[style=numeric, sorting=none, backend=bibtex, backref, doi=false]{biblatex}	% Use Biblatex for customization of bib
+\addbibresource{./bibliography.bib} % BibTeX bibliography file
 
 \usepackage{calc} % For simpler calculation - used for spacing the index letter headings correctly
 \usepackage{makeidx} % Required to make an index
@@ -192,7 +196,7 @@
 \hbox{}
 \vspace*{\fill}
 \thispagestyle{empty}
-\newpage
+%\newpage
 \fi}
 
 %----------------------------------------------------------------------------------------
@@ -442,7 +446,7 @@ innerbottommargin=5pt]{cBox}
 \if@openright
 \null
 \thispagestyle{empty}%
-\newpage
+%\newpage
 \fi
 \fi
 \if@tempswa

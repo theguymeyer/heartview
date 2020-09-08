@@ -250,6 +250,15 @@ class MainWindow(QtWidgets.QMainWindow):
 
         ##  ---------  END -- PyQt UI Setup  --------- 
 
+        ##  --------- START -- Testing ---------
+
+        # Reset Plots
+        qta_test = qta.icon('fa5s.check', color='red')
+        self.test = QtWidgets.QPushButton(qta_test, "")
+        self.test.setEnabled(False)
+        self.test.setFixedSize(50,50)
+
+        ##  --------- END -- Testing ---------
 
     # update the serial device options
     def updateSerialComboBox(self):

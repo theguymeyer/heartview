@@ -1,0 +1,665 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The Legrand Orange Book
+% LaTeX Template
+% Version 2.4 (26/09/2018)
+%
+% SOURCE: https://www.latextemplates.com/template/the-legrand-orange-book
+%
+% This template was downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Mathias Legrand (legrand.mathias@gmail.com) with modifications by:
+% Vel (vel@latextemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+% Compiling this template:
+% This template uses biber for its bibliography and makeindex for its index.
+% When you first open the template, compile it from the command line with the 
+% commands below to make sure your LaTeX distribution is configured correctly:
+%
+% 1) pdflatex main
+% 2) makeindex main.idx -s StyleInd.ist
+% 3) biber main
+% 4) pdflatex main x 2
+%
+% After this, when you wish to update the bibliography/index use the appropriate
+% command above and make sure to compile with pdflatex several times 
+% afterwards to propagate your changes to the document.
+%
+% This template also uses a number of packages which may need to be
+% updated to the newest versions for the template to compile. It is strongly
+% recommended you update your LaTeX distribution if you have any
+% compilation errors.
+%
+% Important note:
+% Chapter heading images should have a 2:1 width:height ratio,
+% e.g. 920px width and 460px height.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[11pt,fleqn]{book} % Default font size and left-justified equations
+
+\input{structure.tex} % Insert the commands.tex file which contains the majority of the structure behind the template
+
+%\hypersetup{pdftitle={Title},pdfauthor={Author}} % Uncomment and fill out to include PDF metadata for the author and title of the book
+
+\usepackage[printonlyused,withpage]{acronym} 
+\usepackage{xcolor}
+\usepackage{pdflscape}
+
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\begingroup
+\thispagestyle{empty} % Suppress headers and footers on the title page
+\begin{tikzpicture}[remember picture,overlay]
+\node[inner sep=0pt] (background) at (current page.center) {\includegraphics[width=1\paperwidth]{background.pdf}};
+\draw (current page.center) node [fill=ocre!30!white,fill opacity=0.2,text opacity=1,inner sep=1cm]{\Huge\centering\bfseries\sffamily\parbox[c][][t]{\paperwidth}{\centering Intro to HeartView\\[15pt] % Book title
+{\Large A Remote Testing Station for Pacemakers}\\[20pt] % Subtitle
+{\huge Guy Meyer}}}; % Author name
+\end{tikzpicture}
+\vfill
+\endgroup
+
+%----------------------------------------------------------------------------------------
+%	COPYRIGHT PAGE
+%----------------------------------------------------------------------------------------
+
+\newpage
+~\vfill
+\thispagestyle{empty}
+
+\setlength\parindent{0pt}
+
+\noindent GPLv3 Copyright \copyright\ 2020 Guy Meyer\\ % Copyright notice
+
+\noindent \textsc{Published by Guy Meyer}\\ % Publisher
+
+\noindent \textsc{github.com/theguymeyer/heartview}\\ % URL
+
+\noindent Licensed under the GNU General Public License version 3 (GPLv3) (the ``License''). This License is a free, copyleft license for software and other kinds of works. You can review the terms of this License at \url{https://www.gnu.org/licenses/gpl-3.0.en.html}. \\ % License information, replace this with your own license (if any)
+
+\noindent \textit{First printing, August 2020} % Printing/edition date
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS
+%----------------------------------------------------------------------------------------
+
+%\usechapterimagefalse % If you don't want to include a chapter image, use this to toggle images off - it can be enabled later with \usechapterimagetrue
+
+\chapterimage{chapter_head_1_pcb.pdf}\cite{piklist} % Table of contents heading image
+
+\pagestyle{empty} % Disable headers and footers for the following pages
+
+\tableofcontents % Print the table of contents itself
+
+%\cleardoublepage % Forces the first chapter to start on an odd page so it's on the right side of the book
+
+\pagestyle{fancy} % Enable headers and footers again
+
+\newpage
+
+\section*{List of Acronyms}
+\addcontentsline{toc}{chapter}{List of Acronyms}
+\begin{acronym}
+	%Define acronyms here
+	%Use intext with \ac{}. Look at reference for the acronym package for a full guide
+	\acro{ADC}{analog to digital convertor}
+	\acro{BPM}{Beats Per Minute}
+	\acro{MCU}{microcontroller}
+	\acro{PCB}{printed circuit board}
+	\acro{OS}{operating system}
+	\acro{UART}{universal asynchronous receiver-transmitter}
+
+\end{acronym}
+
+%----------------------------------------------------------------------------------------
+%	PART
+%----------------------------------------------------------------------------------------
+
+%\part{Part One}
+
+%----------------------------------------------------------------------------------------
+%	CHAPTER 1
+%----------------------------------------------------------------------------------------
+
+\chapterimage{chapter_head_3_ecg.pdf}\cite{dr_med} % Chapter heading image
+
+\chapter{Introduction}
+
+\section{What is it?}\index{Description}
+
+Learn about pacemakers! HeartView is an all-in-one remote testing system for designing pacemaker prototypes. Users can create models using their favourite development environment, deploy to the device, and test in a real-time environment. 
+
+%------------------------------------------------
+
+
+\section{The Pacemaker Challenge}\index{Pacemaker Challenge}
+
+Boston Scientific has released into the public domain the system specification for a previous generation pacemaker. A major reason for publishing this specification is to have it serve as the basis for a challenge to the formal methods community, in the spirit of other Grand Challenges \cite{sqrl_pacemaker}.
+
+
+%------------------------------------------------
+
+\section{Motivation}\index{Motivation}
+
+Over the last few years our group at McMaster University have converted this challenge into an integrated lab supporting a course on software development. The document supports the design process for the students and the development of the pacemaker is split into several assignments completed over the course of the semester. This hands-on learning style has shown success in recent years, seen through student engagement, attendance, and enrollment.\\
+
+The evolution of this product jumped when schools closed due to the global pandemic sending students to learn online. The need for a remote method of development gave rise to HeartView, a remote testing system for pacemaker. Students can now study the mechanics of a pacemaker, and with the physiology of the heart anywhere they go.\\
+
+
+%------------------------------------------------
+
+
+%----------------------------------------------------------------------------------------
+%	CHAPTER 2
+%----------------------------------------------------------------------------------------
+
+\chapter{The HeartView System}
+
+\section{System Components}\index{System Components}
+
+The HeartView testing environment is composed of three pillars software, electrical, and hardware. 
+
+%------------------------------------------------
+
+\subsection{Software}\index{System Components!Software}
+
+The software used for this project can be broken down into two components; the tool used to control the physiology of the heart (used for testing), and that used to program the pacemaker.
+
+%------------------------------------------------
+
+\subsubsection{Heart}\index{System Components!Software!Heart}
+
+The software used to control the heart is the HeartView UI. Meant to be installed on your local machine and communicate with the testing system via serial communication. The HeartView UI receives data from the heart, dispatches test routines, plots real-time data, and supports data analysis, as well as report generation.
+
+%------------------------------------------------
+
+\subsubsection{Pacemaker}\index{System Components!Software!Pacemaker}
+
+In the first version of HeartView (used during the creation of this document), the \ac{MCU} used for the pacemaker is the FRDM K64F. Software can be written using Mbed Studio, MATLAB Simulink (used at McMaster), or other supported frameworks. The essence is to generate a binary file (.bin) that can be flashed (uploaded) onto the board. Learn more below in Section \ref{sec:prog_pacemaker}.
+
+%------------------------------------------------
+
+
+\subsection{Electrical}\index{System Components!Electrical}
+
+In order to create a cardiac simulator two components have to work in parallel, the heart and the pacemaker. 
+
+%------------------------------------------------
+
+\subsubsection{Heart}\index{System Components!Electrical!Heart}
+
+The \ac{MCU} used to power the heart heart is the Nucleo F446RE. It comes equipped with a \ac{PCB} shield that shares signals with the pacemaker via ribbon cables (mimicking the functionality of the electrodes). As an overview, the Nucleo collects electrical signals from the pacemaker using an AD8220 Instrumentation Amplifier and an onboard \ac{ADC}. Signals are sampled and sent to the HeartView UI for plotting via \ac{UART}, ie. serial communication.\\ 
+
+The Nucleo is also responsible for generating natural heart signals according to the test routine constructed in the HeartView UI. Every time a new test routine is dispatched from HeartView, the test is parsed and implmented by the Nucleo in real-time. This is what provides the interactive experience of the HeartView Testing Station. The Nucleo shield also includes a pair of LEDs that pulse with every natural pace giving the user visual indication of natural heart activity.
+
+%------------------------------------------------
+\subsubsection{Pacemaker}\index{System Components!Electrical!Pacemaker}
+
+The pacemaker is a FRDM K64F \ac{MCU} with a shield designed to mimic the electrical composition of a the real implantable device. More can be learned about the pacemaker shield in the ``Pacemaker Shield Explained" document.
+
+%------------------------------------------------
+
+\subsection{Hardware}\index{System Components!Hardware}
+
+Though most of the complexity is in the software and electrical components, the hardware was not trivial. In essence, the hardware is meant to encase the test station and create a comfortable testing environment. Since it is unclear what space is available for the students, priority was given to creating a small form factor device that can protect the electronics without restricting access to key peripherals like the user buttons, and serial connectors. Laser cut covers were made for both sides to ensure that the students can study the electronics without the risk of damaging the device.\\
+
+\begin{figure}[h]
+	\centering\includegraphics[width=0.8\textwidth]{ts_overview.png}
+	\caption{HeartView testing station hardware}
+	\label{fig:ts_overview} % Unique label used for referencing the figure in-text
+	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
+\end{figure}
+
+
+%------------------------------------------------
+
+\section{Downloading the Software}\index{Downloading the Software}\label{sec:downloading_the_software}
+
+Since HeartView is licensed under the GPLv3 Open Source License, the software is available for free on Github. Follow the link corresponding to your \ac{OS} where you can find a zip file that includes the bundled executable.
+
+\subsection{Windows}\index{Installation!Windows}
+
+Windows 10 >>\\ \url{https://github.com/theguymeyer/heartview/blob/master/course_dev/ui-HeartView/win/exe/heartview_win10.zip}
+
+\subsection{MacOS}\index{Installation!MacOS}
+
+MacOS 10.4 or newer >>\\ \url{https://github.com/theguymeyer/heartview/blob/master/course_dev/ui-HeartView/mac/exe/heartview_mac.zip}
+
+\subsection{Linux (Debian/Ubuntu)}\index{Installation!Linux}
+
+Not Supported (Coming Soon!)
+
+%------------------------------------------------
+
+\section{Setting It Up}\index{Setting It Up}
+
+\subsection{Connecting to a Computer}
+
+In order to connect to HeartView a single USB slot is required to connect the Heart (Nucleo board). Follow the instructions in Section \ref{sec:serialcontrols} to connect establish communication between the test station and the UI. Another USB slot is required to upload/flash programs to the pacemaker (FRDM board). If working in a group, you can plug the devices into different computers and interface using the test station. See Figure \ref{fig:system_plugin} to understand how to connect everything together.
+
+\begin{figure}[h]
+	\centering\includegraphics[width=0.8\textwidth]{SystemDiagramPlugin.png}
+	\label{fig:system_plugin} % Unique label used for referencing the figure in-text
+	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
+\end{figure}
+
+
+\subsection{Dispatching Your First Test}
+
+To get started with the test station follow the following setups:\\
+
+\begin{enumerate}
+	\item Download the .zip (see Sec \ref{sec:downloading_the_software})
+	\item Unzip
+	\item Run the HeartView executeable (double click the icon)
+		\begin{itemize}
+			\item MacOS may list this app as an Unknown Developer. To overcome this right-click the icon and select ``Open" from the drop-down menu
+		\end{itemize}
+	\item Connect the 4 pin cables between the heart and pacemaker (as shown in Figure \ref{fig:ts_cables})
+	\item Plug in the test station using both USB cables provided (See Figure \ref{fig:system_plugin} )
+		\begin{itemize}
+			\item \underline{FRDM K64F connects using a mini-USB}. Ensure that you are connected to the OpenSDA port (on right hand-side of the ethernet port when viewing from the top with the pacemaker on the left side of the testing station).
+			\item \underline{Nucleo F446RE connects using a micro-USB}.
+		\end{itemize}
+	\item Press refresh button on the ``Serial Controls" options (found in the HeartView UI) to see the connected devices (see Figure \ref{fig:serial_controls})
+	\item Find the correct serial ID for the Heart (nucleo)
+		\begin{itemize}
+			\item On MacOS would be similar to `cu.usbmodem144203'
+			\item On Windows would be similar to `COM7'
+		\end{itemize}
+	\item Press connect (see Figure \ref{fig:serial_controls})
+	\item Setup the characteristics you want
+	\item Dispatch the test routine by pressing the ``Dispatch" button
+\end{enumerate}
+
+\begin{figure}[h]
+	\centering\includegraphics[width=0.8\textwidth]{ts_cables.png}
+	\caption{HeartView testing station with connected cables}
+	\label{fig:ts_cables} % Unique label used for referencing the figure in-text
+	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
+\end{figure}
+
+%------------------------------------------------
+
+
+
+\section{Development and Testing}\index{Development and Testing}
+
+\subsection{Programming a Pacemaker}\index{Development and Testing!Programming a Pacemaker}\label{sec:prog_pacemaker}
+
+The pacemaker can be developed using your preferred environment where compatible binaries can be generated. At McMaster University, the MATLAB Simulink environment is used. The Simulink tool provides an easy-to-use interface with support for the FRDM K64F via the \href{https://www.mathworks.com/matlabcentral/fileexchange/55318-simulink-coder-support-package-for-nxp-frdm-k64f-board}{\textcolor{blue}{\underline{support package}}}.\\ 
+
+Based on the pacing mode you'd like to develop, use the Simulink blocks, charts, and subsystems to model the correct functionality. The tool is also an effective way of abstracting the code and focusing of functional correctness. Once you are comfortable with the code and would like to begin real-time testing flash the board and use HeartView.\\
+
+To learn about the pacemaker and to understand how to detect and generate pulses read the Pacemaker Shield Explained document. 
+
+%------------------------------------------------
+
+\subsection{Controlling the Heart}\index{Development and Testing!Controlling the Heart}
+
+In this section we're going to dive into each components of the HeartView UI. It is important to remember that the UI is used to generate test conditions for the pacemaker, and can only control characteristics of the heart. See Section \ref{sec:prog_pacemaker} which outlines methods for developing the pacemaker.
+
+As an overview refer to Figure \ref{fig:ui_overview} which outlines the different components of the HeartView UI. Let's go through them...
+
+\subsubsection*{Signal Plots}
+The core of HeartView is in the central signal plots that display atrial activity (upper plot), and ventricular activity (lower plot) in real-time. Each plot depicts both natural heart activity (red), and artificial pacemaker activity (blue). The plots indicate millivolt measurements in the vertical axis, and millisecond timing in the horizontal axis. Users can zoom in to a specific region by performing a click-hold and drag within the plot. 
+
+\subsubsection*{Serial Controls} \label{sec:serialcontrols}
+To collect real-time data, the computer running HeartView must be connected via USB to the Nucleo F446RE (the heart). Once plugged in, it can be selected from the drop-down menu found in the Serial Controls section. It is recommended to first plug in the Nucleo, select the correct serial port and then connect the pacemaker (if to the same computer), this will help identify the correct port. \\
+
+In the case the the serial port does not show, press the blue reset button to the left of the drop-down menu. This will refresh the list and update any new devices plugged in. Once selected press ``Connect". 
+
+
+\begin{figure}[h]
+	\centering\includegraphics[width=0.7\textwidth]{ser_controls_drop.png}
+	\caption{Serial controls options in HeartView UI}
+	\label{fig:serial_controls} % Unique label used for referencing the figure in-text
+	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
+\end{figure}
+
+\subsubsection*{Test Case Builder} 
+This is where the fun begins! A test case is made of four (4) components; Atrial Activity, Ventricular Activity, Heart Rate, and AV Delay. Use these controls to construct the desired operating conditions of the heart. This is primarily useful to perform functional testing for the pacemaker. In addition, chambers can be turned ON or OFF using the toggle buttons. \\
+
+For example, operating mode AAI pacing at 60 \ac{BPM}  can be well tested by observing the pacemaker filling in the missing beats under these conditions... \\
+
+\begin{itemize}
+	\item Natural Atrium is turned ON
+	\item Natural Ventricle is turned OFF
+	\item Natural Atrial Pulse Width is set to 20 ms
+	\item Natural Heart Rate is set to 30 BPM
+	\item Natural AV Delay can be ignored 
+\end{itemize}
+
+Further verification can be achieved by slowly lowering the Atrial Pulse width until it is no longer detected. This tests the detection threshold of the pacemaker.
+
+\subsubsection*{Dispatcher} 
+Test routines are not active until they are dispatched using the ``Dispatch" button. This is to ensure that the user can focus on a specific test. 
+
+\subsubsection*{Active Test Label} 
+The information listed in this label describes the test routine currently loaded on into the heart. Users can be confident in their tests by ensuring that the correct test is dispatched and loaded. 
+
+\subsubsection*{Help Page} 
+If you forget the function HeartView, click this help button for quick refresher! 
+
+\begin{figure}[h]
+	\centering\includegraphics[width=0.1\textwidth]{btn_help.png}
+	\caption{Help button to open tutorial on how to operate HeartView}
+	\label{fig:button_help} % Unique label used for referencing the figure in-text
+	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
+\end{figure}
+
+\subsubsection*{Report Generation} 
+described in Section \ref{sec:generating_report} 
+
+\subsubsection*{Plotter Controls}
+The plots upload data in real-time. Use these buttons to pause, start and reset data being displayed in the plots. Pausing the data does not stop the flow of new readings, as such, while paused all incoming data will be lost. When starting the plots from a stopped position, the plots will reset and data will begin plotting immediately, therefore, it is recommended to allow a few seconds before recording any data. Finally, resetting the plots simply performs an auto-range on the axes so that the data is seen correctly. 
+
+
+\begin{figure}[h]
+	\centering\includegraphics[width=0.1\textwidth]{btn_stop.png}
+	\centering\includegraphics[width=0.1\textwidth]{btn_start.png}
+	\centering\includegraphics[width=0.1\textwidth]{btn_reset.png}
+	\caption{Controls for the HeartView Real-Time Plots (from left to right; stop, start, reset)}
+	\label{fig:plotter_buttons} % Unique label used for referencing the figure in-text
+	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
+\end{figure}
+
+\begin{landscape}
+\begin{figure}[h]
+	\centering\includegraphics[width=1.5\textwidth]{hv_ui_exp.png}
+	\caption{Component breakdown of the HeartView UI}
+	\label{fig:ui_overview} % Unique label used for referencing the figure in-text
+\end{figure}
+\end{landscape}
+
+%------------------------------------------------
+
+
+\section{Generating Reports}\index{Generating Reports}\label{sec:generating_report}
+
+Report generation is a useful tool for recording and distributing test results to others. Reports can be generated at any time by clicking the Printer button in the top right (see Figure \ref{fig:gen_report_icon}).
+
+\begin{figure}[h]
+	\centering\includegraphics[width=0.1\textwidth]{btn_report.png}
+	\caption{Select this button to begin report generation}
+	\label{fig:gen_report_icon} % Unique label used for referencing the figure in-text
+	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
+\end{figure}
+
+Once selected a menu will pop-up to build the report (see Figure \ref{fig:gen_report_menu}). Select/deselect the radio buttons to exclude specific sections, title the report with a personalized ID (note that a timestamp will be added after the report ID), and select a destination folder. Once the generation is complete then HeartView will display the file location underneath the graphs.\\ 
+
+If the report is generated while HeartView is still outputting real-time data, then the report will include the data displayed when the ``Generate..." button is pressed. If you'd like specific data, then you should pause the graph prior to beginning report generation. 
+
+\begin{figure}[h]
+	\centering\includegraphics[width=0.4\textwidth]{gen_report_menu.png}
+	\caption{Select this button to begin report generation}
+	\label{fig:gen_report_menu} % Unique label used for referencing the figure in-text
+	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
+\end{figure}
+
+
+\section{Troubleshooting}
+
+\subsection{Unable to connect the Nucleo (Heart) in Windows}
+
+You'll notice this issue when running HeartView, have connected the USB cable from the nucleo to your computer, but the nucleo board does not display in the serial drop-down menu.\\
+
+First try to select the refresh button a couple of times after a minute to allow your machine time to detect the device. If you are still experiencing this issue where the port is undetected then your computer does not have the drivers installed. This can be fixed by following these steps:\\
+
+\begin{enumerate}
+	\item Disconnect the Nucleo from you computer
+	\item Follow this link \href{https://www.st.com/en/development-tools/stsw-link009.html}{\textcolor{blue}{\underline{https://www.st.com/en/development-tools/stsw-link009.html}}}
+	\begin{itemize}
+		\item You may need to be a member to download the software
+	\end{itemize}
+	\item Select ``Get Software"
+	\item Accept the License Agreement
+	\item You will receive an email with a link to the same page
+	\begin{itemize}
+		\item Ensure that you are using the same browser session when accessing this link
+	\end{itemize}
+	\item Save the PDF and unzip..
+	\item Follow the instruction in ``readme.txt"\\
+\end{enumerate}
+
+\underline{Note:} You can verify driver incompatibility by going to the ``Device Manager" and verifying that the Nucleo is only listed as a Portable Device and not under Ports. Once the driver is installer you will see it in the list of COM Ports.\\
+
+Once the drivers are installed simply restart HeartView and connect to the correct COM Port.
+
+%------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+%	PART
+%----------------------------------------------------------------------------------------
+
+%\part{Part Two}
+
+%----------------------------------------------------------------------------------------
+%	CHAPTER 3
+%----------------------------------------------------------------------------------------
+
+\chapterimage{chapter_head_2_vangogh.pdf}\cite{van_gogh} % Chapter heading image
+
+\chapter{Developer Notes}
+
+
+\section{The Github Project}\index{github}
+
+HeartView is a copy-left, open-source project. In essence, it is an introductory tool to learn about pacemakers. To view the source code or the hardware design visit the original Github project (https://github.com/theguymeyer/heartview). In the repo you can also find useful information about design and development, along with the original source code. \\
+
+To become a contributor just reach out!
+
+\section{HeartView UI - readme}\index{developer_heartview}
+
+The HeartView UI is the main interface of the remote testing station. Users can build test routines using the \textbf{Control Panel} and see the pacing information in using the \textbf{Real Time Plots}.
+
+\subsection{Components}
+
+\subsubsection{Control Panel}
+
+The user can uses this UI component to build test routines. The user can set pacing information with the available buttons and dispatch the test routine to the testing controller (MCU: nucleo-f446RE in this implementation). The data is transmitted to the testing controller via serial and is updated in real-time.
+
+\subsubsection{Real Time Plots}
+
+The user can use this UI component to see the resulting waveforms they generated using their pacemaker, along with the testing routine currently running on the Testing Controller. The objective is to allow the user to compare waveforms and ensure that their operation is correct. As a result, timing is strict and must match the actual MCU operation with high accuracy. 
+
+\subsection{Error Handling}
+
+No device connected upon serial start - upon boot the system will try to connect to the testing controller via serial. If the device is not found on the given port then the status bar will be updated.\\
+
+No serial device connected upon send - if the user tries to send a test routine when no device is connected then the serial.Exception is caught and the status bar is updated.
+
+\subsection{Supporting Libraries}
+
+The following are a set of Python3 Libraries that enable the functionality in this application.
+
+\begin{enumerate}
+	\item \href{https://pypi.org/project/PyQt5/}{\textcolor{blue}{\underline{PyQt5 5.15.0}}}
+	\begin{itemize}
+		\item Frameworks for all UI elements, and serial communication
+		\item \begin{verbatim}pip3 install PyQt5 \end{verbatim}
+	\end{itemize}
+	\item \href{https://pyqtgraph.readthedocs.io/en/latest/index.html}{\textcolor{blue}{\underline{pyqtgraph}}}
+		\begin{itemize}
+		\item Used to generate responsive real-time plots
+		\item \begin{verbatim}pip3 install pyqtgraph \end{verbatim} (source \href{https://pypi.org/project/pyqtgraph/}{\textcolor{blue}{\underline{https://pypi.org/project/pyqtgraph/}}})
+	\end{itemize}
+	\item \href{https://pypi.org/project/QtAwesome/}{\textcolor{blue}{\underline{QtAwesome}}}
+		\begin{itemize}
+		\item Used for button and label icons
+		\item \begin{verbatim}pip3 install QtAwesome \end{verbatim}
+	\end{itemize}
+	\item \href{https://pypi.org/project/fpdf/}{\textcolor{blue}{\underline{fpdf}}}
+		\begin{itemize}
+		\item Used to generate printer-friendly PDF report
+		\item \begin{verbatim}pip3 install fpdf \end{verbatim}
+	\end{itemize}
+	\item \href{https://pypi.org/project/numpy/}{\textcolor{blue}{\underline{numpy}}}
+		\begin{itemize}
+			\item Mathematical computation
+			\item \begin{verbatim}pip3 install numpy \end{verbatim}
+		\end{itemize}
+	\item Standard Python3 Libraries: sys, os
+\end{enumerate}
+
+
+
+\subsection{Distribution}
+
+This app is intended to be licensed under the GPLv3. As such it is possible to distribute HeartView due to its dependencies on PyQt5 and PyInstaller (bundling framework).\\
+
+Currently in development, the distribution bundler is PyInstaller.\\
+
+According to the PyInstaller documentation the end users ``do not need to have Python installed at all" \href{https://readthedocs.org/projects/pyinstaller/downloads/pdf/latest/}{\textcolor{blue}{\underline{docs}}}. Good to note! In addition the docs note that in order to generate executables for a different OS, a different version of Python, or a 32-bit/64-bit machine then PyInstaller must be run on that platform. The first distribution is for macOS Catalina 15.5.0.\\
+
+In order to create a distributable bundle for OSX follow these instructions...\\
+
+Create a virtual environment using Python3.7.7 (I use pyenv). My virtual environment is called pyqt-venv-py3.7.7, therefore run, \\
+
+\begin{verbatim}pyenv activate pyqt-venv-py3.7.7 \end{verbatim}
+
+Ensure that the correct libraries are installed using `pip3 freeze`. Key libraries are mentioned above in "Supporting Libraries". To generate a bundled package for OSX run the following: 
+
+\begin{verbatim}python3 -m PyInstaller --onefile --windowed HeartView.spec \end{verbatim}
+
+.. and confirm if applicable (yes, yes)\\
+
+\textbf{INFO PLIST}\\
+
+The info.plist file is a distribution file manadatory for OSx applications. The purpose of this file is to outline the bundle specification of the app. PyInstaller includes the info.plist file along with the bundle.
+
+\subsubsection{Generating app}
+
+A bundler script was created to automate the process of file generation, \textit{create\_macOS\_bundle.sh}. Windows bundling follows similar rules, a batch file is included in the Github repo to aid in bundling Windows exe's.\\
+
+\underline{Manual:}
+
+\begin{verbatim}
+NAME 
+create\_macOS\_bundle.sh
+
+DESCRIPTION
+used to compile a HeartView distributable for MacOS. 
+Log info is dumped into 'build.txt' file which is unique for every run.
+
+-t      Type of bundle
+-t1 => one file
+-t0 => one directory
+
+-c1     Clear dist and build dirs 
+-c1 => clear
+
+-s      Apply codesign with certificate. 
+The user must input  their certificate common name as an argument 
+(Like this.. "Apple Development: Your Name (AAAA1A1A1A)")
+
+EXAMPLES
+The following is how to generate a one-file app for macOS
+
+./create\_macOS\_bundle.sh -t1 -c1 
+
+The following is how to generate a one-file app for macOS with code signing
+
+./create\_macOS\_bundle.sh -t1 -s="Apple Development: Your Name (AAAA1A1A1A)" -c1 
+\end{verbatim}
+
+\subsubsection{Code Signing}
+
+The major reason for this component is to ensure that HeartView is a recognized app and can be freely distributed to all users.\\
+
+After PyInstaller compilation it is time to sign the app found in dist/HeartView.app
+
+Use this command to sign the app:\\
+\begin{verbatim}codesign -s "\$CERTIFICATE\_COMMON\_NAME" -v dist/HeartView.app --deep \end{verbatim}
+
+The ``--deep" flag is an important addition to ensure that all files are signed.\\
+
+Useful documentation by Apple when starting Codesigning \href{https://developer.apple.com/library/archive/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html}{\textcolor{blue}{\underline{here}}}\\
+
+Useful documentation by PyInstaller when starting Codesigning \href{https://github.com/pyinstaller/pyinstaller/wiki/Recipe-OSX-Code-Signing}{\textcolor{blue}{\underline{here}}}\\
+
+I was having code signing errors and the instructions by honey9 in this \href{https://developer.apple.com/forums/thread/86161?login=true}{\textcolor{blue}{\underline{post}}} really helped
+
+
+\subsection{Deployment}
+
+When testing on other machines, namely macs, I ran into several early stage problems. \\
+
+\begin{enumerate}
+	\item Apps in Quaratine: Since from an unknown developer HeartView was quarantined by macOS Sierra Version 10.12.6. This \href{https://apple.stackexchange.com/questions/181026/lsopenurlswithrole-failed-with-error-10810-cant-open-install-os-x-yosemite}{\textcolor{blue}{\underline{post}}} resolved the issue.
+	
+	\item LSOpenURL... (-10810) - occurs when an app that is not codesigning is downloaded to a MacOS system. Ensure that signatures have been applied and that the Bundle and Executable are named the same.
+\end{enumerate}
+
+
+The issue here is no reverse compatability for MacOS applications. The answer was indicated \href{https://github.com/pyinstaller/pyinstaller/issues/3418}{\textcolor{blue}{\underline{here}}}. As explained, in order to create copy for High Sierra and back the app much be compiled on a very like Mavericks. \\
+
+A viable solution as noted by \textbf{abulka} is to create a Mavericks copy on VMware and install the python, PyInstaller and the source code. The app should be forward compatible to High Sierra.
+
+\section{Development Issues}
+
+\subsection{Electrical}
+
+A notable electrical issue was found when functional testing began. The issue is with the I/O system of the heart which filters the incoming DC signal from the pacemaker. The instrumentation amplifier used is the AD8220 which performs common-mode rejection on between the inputs. As a result the pacemaker signal is not displayed accurately in HeartView. Assuming a correct implementation in Simulink, the pacemaker will output a signal similar to that depicted in Figure \ref{fig:signal_pacemaker} - left, but due to the errors in circuit design then the signal appears as shown in Figure \ref{fig:signal_pacemaker} - right.
+
+\begin{figure}[h]
+	\centering\includegraphics[width=0.3\textwidth]{signal_true.png}
+	\centering\includegraphics[width=0.3\textwidth]{signal_filtered.png}
+	\caption{Signal output by pacemaker (left), signal shown in HeartView (right)}
+	\label{fig:signal_pacemaker} % Unique label used for referencing the figure in-text
+	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
+\end{figure}
+
+\cleardoublepage
+
+%------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+
+% but why???? the printbib command is before the chapter start but the pdf renders fine...... ugh latex!
+\printbibliography
+\chapter*{Bibliography}
+\addcontentsline{toc}{chapter}{\textcolor{ocre}{Bibliography}} % Add a Bibliography heading to the table of contents
+
+
+%----------------------------------------------------------------------------------------
+%	INDEX
+%----------------------------------------------------------------------------------------
+
+%\cleardoublepage % Make sure the index starts on an odd (right side) page
+%\phantomsection
+%\setlength{\columnsep}{0.75cm} % Space between the 2 columns of the index
+%\addcontentsline{toc}{chapter}{\textcolor{ocre}{Index}} % Add an Index heading to the table of contents
+%\printindex % Output the index
+
+%----------------------------------------------------------------------------------------
+
+
+\begin{figure}[h]
+	\centering\includegraphics[width=0.2\textwidth]{mac_fireball.jpg}
+	\label{fig:fireball} % Unique label used for referencing the figure in-text
+	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
+\end{figure}
+
+\centering
+Sponsored by McMaster University Department of Computing and Software
+
+
+\end{document}
