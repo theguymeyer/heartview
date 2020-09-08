@@ -54,6 +54,7 @@
 \usepackage{xcolor}
 \usepackage{pdflscape}
 
+
 %----------------------------------------------------------------------------------------
 
 \begin{document}
@@ -65,8 +66,8 @@
 \begingroup
 \thispagestyle{empty} % Suppress headers and footers on the title page
 \begin{tikzpicture}[remember picture,overlay]
-\node[inner sep=0pt] (background) at (current page.center) {\includegraphics[width=\paperwidth]{background.pdf}};
-\draw (current page.center) node [fill=ocre!30!white,fill opacity=0.6,text opacity=1,inner sep=1cm]{\Huge\centering\bfseries\sffamily\parbox[c][][t]{\paperwidth}{\centering Intro to HeartView\\[15pt] % Book title
+\node[inner sep=0pt] (background) at (current page.center) {\includegraphics[width=1\paperwidth]{background.pdf}};
+\draw (current page.center) node [fill=ocre!30!white,fill opacity=0.2,text opacity=1,inner sep=1cm]{\Huge\centering\bfseries\sffamily\parbox[c][][t]{\paperwidth}{\centering Intro to HeartView\\[15pt] % Book title
 {\Large A Remote Testing Station for Pacemakers}\\[20pt] % Subtitle
 {\huge Guy Meyer}}}; % Author name
 \end{tikzpicture}
@@ -105,9 +106,11 @@
 
 \tableofcontents % Print the table of contents itself
 
-\cleardoublepage % Forces the first chapter to start on an odd page so it's on the right side of the book
+%\cleardoublepage % Forces the first chapter to start on an odd page so it's on the right side of the book
 
 \pagestyle{fancy} % Enable headers and footers again
+
+\newpage
 
 \section*{List of Acronyms}
 \addcontentsline{toc}{chapter}{List of Acronyms}
@@ -187,7 +190,7 @@ The software used to control the heart is the HeartView UI. Meant to be installe
 
 \subsubsection{Pacemaker}\index{System Components!Software!Pacemaker}
 
-\underline{\textit{\textbf{In the first version of HeartView (used during the creation of this document), the \ac{MCU} used for the pacemaker is the FRDM K64F.}}} Software can be written using Mbed Studio, MATLAB Simulink (used at McMaster), or other supported frameworks. The essence is to generate a binary file (.bin) that can be flashed (uploaded) onto the board. Learn more below \nameref{Development and Testing!Programming a Pacemaker}.
+In the first version of HeartView (used during the creation of this document), the \ac{MCU} used for the pacemaker is the FRDM K64F. Software can be written using Mbed Studio, MATLAB Simulink (used at McMaster), or other supported frameworks. The essence is to generate a binary file (.bin) that can be flashed (uploaded) onto the board. Learn more below in Section \ref{sec:prog_pacemaker}.
 
 %------------------------------------------------
 
@@ -216,7 +219,7 @@ The pacemaker is a FRDM K64F \ac{MCU} with a shield designed to mimic the electr
 Though most of the complexity is in the software and electrical components, the hardware was not trivial. In essence, the hardware is meant to encase the test station and create a comfortable testing environment. Since it is unclear what space is available for the students, priority was given to creating a small form factor device that can protect the electronics without restricting access to key peripherals like the user buttons, and serial connectors. Laser cut covers were made for both sides to ensure that the students can study the electronics without the risk of damaging the device.\\
 
 \begin{figure}[h]
-	\centering\includegraphics[width=\textwidth]{ts_overview.png}
+	\centering\includegraphics[width=0.8\textwidth]{ts_overview.png}
 	\caption{HeartView testing station hardware}
 	\label{fig:ts_overview} % Unique label used for referencing the figure in-text
 	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
@@ -245,8 +248,17 @@ Not Supported (Coming Soon!)
 
 \section{Setting It Up}\index{Setting It Up}
 
-\subsection{Opening HeartView}
 \subsection{Connecting to a Computer}
+
+In order to connect to HeartView a single USB slot is required to connect the Heart (Nucleo board). Follow the instructions in Section \ref{sec:serialcontrols} to connect establish communication between the test station and the UI. Another USB slot is required to upload/flash programs to the pacemaker (FRDM board). If working in a group, you can plug the devices into different computers and interface using the test station. See Figure \ref{fig:system_plugin} to understand how to connect everything together.
+
+\begin{figure}[h]
+	\centering\includegraphics[width=0.8\textwidth]{SystemDiagramPlugin.png}
+	\label{fig:system_plugin} % Unique label used for referencing the figure in-text
+	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
+\end{figure}
+
+
 \subsection{Dispatching Your First Test}
 
 To get started with the test station follow the following setups:\\
@@ -259,24 +271,24 @@ To get started with the test station follow the following setups:\\
 			\item MacOS may list this app as an Unknown Developer. To overcome this right-click the icon and select ``Open" from the drop-down menu
 		\end{itemize}
 	\item Connect the 4 pin cables between the heart and pacemaker (as shown in Figure \ref{fig:ts_cables})
-	\item Plug in the test station using both USB cables provided (TODO add plug in instructions - pamphlet)
+	\item Plug in the test station using both USB cables provided (See Figure \ref{fig:system_plugin} )
 		\begin{itemize}
 			\item \underline{FRDM K64F connects using a mini-USB}. Ensure that you are connected to the OpenSDA port (on right hand-side of the ethernet port when viewing from the top with the pacemaker on the left side of the testing station).
 			\item \underline{Nucleo F446RE connects using a micro-USB}.
 		\end{itemize}
-	\item Press refresh button on the ``Serial Controls" options (found in the HeartView UI) to see the connected devices (TODO - add snippet image)
+	\item Press refresh button on the ``Serial Controls" options (found in the HeartView UI) to see the connected devices (see Figure \ref{fig:serial_controls})
 	\item Find the correct serial ID for the Heart (nucleo)
 		\begin{itemize}
 			\item On MacOS would be similar to `cu.usbmodem144203'
 			\item On Windows would be similar to `COM7'
 		\end{itemize}
-	\item Press connect (TODO - add snippet image)
+	\item Press connect (see Figure \ref{fig:serial_controls})
 	\item Setup the characteristics you want
 	\item Dispatch the test routine by pressing the ``Dispatch" button
 \end{enumerate}
 
 \begin{figure}[h]
-	\centering\includegraphics[width=\textwidth]{ts_cables.png}
+	\centering\includegraphics[width=0.8\textwidth]{ts_cables.png}
 	\caption{HeartView testing station with connected cables}
 	\label{fig:ts_cables} % Unique label used for referencing the figure in-text
 	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
@@ -307,11 +319,18 @@ As an overview refer to Figure \ref{fig:ui_overview} which outlines the differen
 \subsubsection*{Signal Plots}
 The core of HeartView is in the central signal plots that display atrial activity (upper plot), and ventricular activity (lower plot) in real-time. Each plot depicts both natural heart activity (red), and artificial pacemaker activity (blue). The plots indicate millivolt measurements in the vertical axis, and millisecond timing in the horizontal axis. Users can zoom in to a specific region by performing a click-hold and drag within the plot. 
 
-\subsubsection*{Serial Controls} 
+\subsubsection*{Serial Controls} \label{sec:serialcontrols}
 To collect real-time data, the computer running HeartView must be connected via USB to the Nucleo F446RE (the heart). Once plugged in, it can be selected from the drop-down menu found in the Serial Controls section. It is recommended to first plug in the Nucleo, select the correct serial port and then connect the pacemaker (if to the same computer), this will help identify the correct port. \\
 
 In the case the the serial port does not show, press the blue reset button to the left of the drop-down menu. This will refresh the list and update any new devices plugged in. Once selected press ``Connect". 
 
+
+\begin{figure}[h]
+	\centering\includegraphics[width=0.7\textwidth]{ser_controls_drop.png}
+	\caption{Serial controls options in HeartView UI}
+	\label{fig:serial_controls} % Unique label used for referencing the figure in-text
+	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
+\end{figure}
 
 \subsubsection*{Test Case Builder} 
 This is where the fun begins! A test case is made of four (4) components; Atrial Activity, Ventricular Activity, Heart Rate, and AV Delay. Use these controls to construct the desired operating conditions of the heart. This is primarily useful to perform functional testing for the pacemaker. In addition, chambers can be turned ON or OFF using the toggle buttons. \\
@@ -337,11 +356,28 @@ The information listed in this label describes the test routine currently loaded
 \subsubsection*{Help Page} 
 If you forget the function HeartView, click this help button for quick refresher! 
 
+\begin{figure}[h]
+	\centering\includegraphics[width=0.1\textwidth]{btn_help.png}
+	\caption{Help button to open tutorial on how to operate HeartView}
+	\label{fig:button_help} % Unique label used for referencing the figure in-text
+	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
+\end{figure}
+
 \subsubsection*{Report Generation} 
 described in Section \ref{sec:generating_report} 
 
 \subsubsection*{Plotter Controls}
 The plots upload data in real-time. Use these buttons to pause, start and reset data being displayed in the plots. Pausing the data does not stop the flow of new readings, as such, while paused all incoming data will be lost. When starting the plots from a stopped position, the plots will reset and data will begin plotting immediately, therefore, it is recommended to allow a few seconds before recording any data. Finally, resetting the plots simply performs an auto-range on the axes so that the data is seen correctly. 
+
+
+\begin{figure}[h]
+	\centering\includegraphics[width=0.1\textwidth]{btn_stop.png}
+	\centering\includegraphics[width=0.1\textwidth]{btn_start.png}
+	\centering\includegraphics[width=0.1\textwidth]{btn_reset.png}
+	\caption{Controls for the HeartView Real-Time Plots (from left to right; stop, start, reset)}
+	\label{fig:plotter_buttons} % Unique label used for referencing the figure in-text
+	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
+\end{figure}
 
 \begin{landscape}
 \begin{figure}[h]
@@ -359,7 +395,7 @@ The plots upload data in real-time. Use these buttons to pause, start and reset 
 Report generation is a useful tool for recording and distributing test results to others. Reports can be generated at any time by clicking the Printer button in the top right (see Figure \ref{fig:gen_report_icon}).
 
 \begin{figure}[h]
-	\centering\includegraphics[width=0.1\textwidth]{gen_report_icon.png}
+	\centering\includegraphics[width=0.1\textwidth]{btn_report.png}
 	\caption{Select this button to begin report generation}
 	\label{fig:gen_report_icon} % Unique label used for referencing the figure in-text
 	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
@@ -589,45 +625,41 @@ A notable electrical issue was found when functional testing began. The issue is
 	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
 \end{figure}
 
+\cleardoublepage
+
 %------------------------------------------------
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
 
+% but why???? the printbib command is before the chapter start but the pdf renders fine...... ugh latex!
+\printbibliography
 \chapter*{Bibliography}
 \addcontentsline{toc}{chapter}{\textcolor{ocre}{Bibliography}} % Add a Bibliography heading to the table of contents
-
-%------------------------------------------------
-
-\section*{Articles}
-\addcontentsline{toc}{section}{Articles}
-\printbibliography[heading=bibempty,type=article]
-
-%------------------------------------------------
-
-\section*{Books}
-\addcontentsline{toc}{section}{Books}
-\printbibliography[heading=bibempty,type=book]
-
-
-%------------------------------------------------
-
-\section*{Online}
-\addcontentsline{toc}{section}{Online}
-\printbibliography[heading=bibempty,type=online]
 
 
 %----------------------------------------------------------------------------------------
 %	INDEX
 %----------------------------------------------------------------------------------------
 
-\cleardoublepage % Make sure the index starts on an odd (right side) page
-\phantomsection
-\setlength{\columnsep}{0.75cm} % Space between the 2 columns of the index
-\addcontentsline{toc}{chapter}{\textcolor{ocre}{Index}} % Add an Index heading to the table of contents
-\printindex % Output the index
+%\cleardoublepage % Make sure the index starts on an odd (right side) page
+%\phantomsection
+%\setlength{\columnsep}{0.75cm} % Space between the 2 columns of the index
+%\addcontentsline{toc}{chapter}{\textcolor{ocre}{Index}} % Add an Index heading to the table of contents
+%\printindex % Output the index
 
 %----------------------------------------------------------------------------------------
+
+
+\begin{figure}[h]
+	\centering\includegraphics[width=0.2\textwidth]{mac_fireball.jpg}
+	\label{fig:fireball} % Unique label used for referencing the figure in-text
+	%\addcontentsline{toc}{figure}{Figure \ref{fig:placeholder}} % Uncomment to add the figure to the table of contents
+\end{figure}
+
+\centering
+Sponsored by McMaster University Department of Computing and Software
+
 
 \end{document}
