@@ -99,7 +99,7 @@ class SerialWidget(QtCore.QObject):
                 # What's essentially happening is that too much data results in this malloc error...
                 #   Python(2254,0x111685dc0) malloc: *** error for object 0x7f83287b2000: pointer being freed was not allocated
                 #   Python(2254,0x111685dc0) malloc: *** set a breakpoint in malloc_error_break to debug
-                # I think that a viable solution would be to plot at higher speeds but that might require a 
+                # I think that a viable solution of simply dumping the data would be to plot at higher speeds but that might require a 
                 # substantial refactoring of the code. As a result I will stick with this hack since it seems to produce the 
                 # desired result for this time-sensitive project
                 #
