@@ -1,0 +1,120 @@
+# Filename: app.kv
+<ListItemWithCheckbox>:
+    RightCheckbox:
+
+
+<MainFrame>:
+    orientation: "vertical"
+    MDToolbar:
+        title: "Cardioflasher"
+        right_action_items: [["settings", lambda x: x]]
+    GridLayout:
+        rows: 2
+        height: self.minimum_height
+        padding: [20,0,20,0]
+        GridLayout:
+            cols:2
+            spacing: 10, 8
+            height: 0.4*root.height
+            size_hint_y: None
+            padding: [0,20,0,10]
+            MDCard:
+                padding: "10dp"
+                orientation: "vertical"
+                MDLabel:
+                    halign: 'center'
+                    valign: 'top'
+                    text: "Nucleo-F446RE"
+                    bold: True
+                MDSeparator:
+                MDLabel:
+                    id: nucleo_status
+                    halign: 'center'
+                    text: root.nucleo_status
+                MDLabel:
+                    font_style: 'Subtitle2'
+                    id: nucleoUUID
+                    halign: 'center'
+                    text: root.nucleoUUID
+                MDLabel:
+                    font_style: 'Subtitle2'
+                    id: nucleoUUID
+                    halign: 'center'
+                    text: root.nucleoPort
+                BoxLayout:
+                    GridLayout:
+                        rows: 2            
+                        AnchorLayout:
+                            padding: [0,20,0,0]
+                            anchor_x: 'center'
+                            anchor_y: 'bottom'
+                            MDFillRoundFlatButton:
+                                text: root.nucleoBinary
+                                halign: 'center'
+                                on_press: root.nucleoSelect()
+                BoxLayout:
+                    padding: 10,0,10,0
+                    MDProgressBar:
+                        value: root.nucleoProgress
+                        halign: 'center'
+                        width: root.width * 0.7
+
+            MDCard:
+                padding: "10dp"
+                orientation: "vertical"
+                MDLabel:
+                    halign: 'center'
+                    text: "FRDM-K64F"
+                    bold: True
+                MDSeparator:
+                MDLabel:
+                    id: frdm_status
+                    halign: 'center'
+                    text: root.frdm_status
+                MDLabel:
+                    font_style: 'Subtitle2'
+                    id: frdmUUID
+                    halign: 'center'
+                    text: root.frdmUUID
+                MDLabel:
+                    font_style: 'Subtitle2'
+                    id: nucleoUUID
+                    halign: 'center'
+                    text: root.frdmPort
+                BoxLayout:
+                    GridLayout:
+                        rows: 2            
+                        AnchorLayout:
+                            padding: [0,20,0,0]
+                            anchor_x: 'center'
+                            anchor_y: 'bottom'
+                            MDFillRoundFlatButton:
+                                text: root.frdmBinary
+                                halign: 'center'
+                                on_press: root.frdmSelect()
+
+
+                BoxLayout:
+                    padding: 10,0,10,0
+                    MDProgressBar:
+                        value: root.frdmProgress
+                        halign: 'center'
+                        width: root.width * 0.7
+        BoxLayout:
+            padding: [0,10,0,20]
+            MDCard:
+                orientation: 'vertical'
+                BoxLayout:
+                    ScrollView:
+                        MDList:
+                            id: scroll
+                AnchorLayout:
+                    padding: "10dp"
+                    anchor_x: 'center'
+                    anchor_y: 'bottom'
+                    height: 0.1*root.height
+                    size_hint_y: None
+                    MDFillRoundFlatButton:
+                        text: "Start"
+                        halign: 'center'
+                        on_press: root.start()

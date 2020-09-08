@@ -1,0 +1,78 @@
+{
+    "AT1": {
+        "Name": "K64F WHOAMI",
+        "Type": "SEND;RCV",
+        "Devices": "K64F;K64F",
+        "Packets": [
+            [0]
+        ],
+        "Expected": [
+            "K64F\n"
+        ]
+    },
+    "AT2": {
+        "Name": "F446RE WHOAMI",
+        "Type": "SEND;RCV",
+        "Devices": "F446RE;F446RE",
+        "Packets": [
+            [
+                0,
+                0,
+                0,
+                0
+            ]
+        ],
+        "Expected": [
+            "F446RE\n"
+        ]
+    },
+    "AT3": {
+        "Name": "K64F Pacing",
+        "Type": "SEND;PEAK,PW",
+        "Devices": "K64F;F446RE",
+        "Packets": [
+            [
+                1,
+                5,
+                10
+            ],
+            [
+                2,
+                5,
+                10
+            ],
+            [
+                1,
+                2,
+                1
+            ],
+            [
+                2,
+                2,
+                1
+            ]
+        ],
+        "Expected": [
+            [
+                "ATR",
+                5,
+                10
+            ],
+            [
+                "VENT",
+                5,
+                10
+            ],
+            [
+                "ATR",
+                2,
+                1
+            ],
+            [
+                "VENT",
+                2,
+                1
+            ]
+        ]
+    }
+}
