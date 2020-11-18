@@ -14,8 +14,8 @@ course_dev/ui/bin/test.py
 /employment_agreement/
 
 # CubeMX
-course_dev/shield_nucleo_rev0/CubeMX/
-course_dev/shield_nucleo/CubeMX/test_ADCwithCPU-UARTwithDMA/
+#course_dev/shield_nucleo_rev0/CubeMX/
+course_dev/shield_nucleo/CubeMX/tests/
 
 # HeartView
 course_dev/ui-HeartView/build/
