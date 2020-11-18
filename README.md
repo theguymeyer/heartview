@@ -2,7 +2,7 @@
 
 A real-time testing system for pacemaker prototypes. 
 
-The pacemaker project is a long standing challenge by Boston Scientific sponsored by McMaster University's Center for Software Certification -> [More](http://sqrl.mcmaster.ca/pacemaker.htm). This repo is the open-source (GPLv3) code base for the HeartView Testing GUI, embedded development files, and design files for the hardware and electrical systems.
+The pacemaker project is a long standing challenge by Boston Scientific sponsored by McMaster University's Center for Software Certification -> [More](http://sqrl.mcmaster.ca/pacemaker.htm). This repo is the open-source (GPLv3) code base for the HeartView Testing GUI, embedded development files, and design files for the hardware and electrical systems. Even more info [here](https://guymeyer.me/project/heartview).
 
 ## Directory
 
