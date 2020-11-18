@@ -8,16 +8,24 @@ The pacemaker project is a long standing challenge by Boston Scientific sponsore
 
 HeartView Documentation -> https://github.com/theguymeyer/heartview/blob/master/course_dev/documentation/heartview_explained/intro_to_heartview.pdf
 
+
 MacOS Executeable for HeartView -> https://github.com/theguymeyer/heartview/tree/master/course_dev/ui-HeartView/mac/exe
+
 Windows Executeable for HeartView -> https://github.com/theguymeyer/heartview/tree/master/course_dev/ui-HeartView/win/exe
 
+
 Nucleo Embedded Codebase -> https://github.com/theguymeyer/heartview/tree/master/course_dev/shield_nucleo_rev0/CubeMX
+
 PCB Build Packages -> https://github.com/theguymeyer/heartview/tree/master/course_dev/Production/build
 
+
 Heart Shield Design (Nucleo) -> https://github.com/theguymeyer/heartview/tree/master/course_dev/shield_nucleo_rev0
+
 Pacemaker Shield Design -> https://github.com/theguymeyer/heartview/tree/master/course_dev/shield_pacemaker
 
+
 Mechanical Design (casing) -> https://github.com/theguymeyer/heartview/tree/master/course_dev/casing/rev0
+
 
 Testing Files -> https://github.com/theguymeyer/heartview/tree/master/course_dev/testing
 
